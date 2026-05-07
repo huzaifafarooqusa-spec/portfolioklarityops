@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlarityOps | Operational Infrastructure Presentation</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --brand-orange: #EE6B2F;
+            --brand-ink: #0A0A0A;
+            --brand-navy: #0E2042;
+            --brand-soft: #1A1A1A;
+            --brand-muted: #888888;
+            --brand-light: #FCEEDD;
+            --text-main: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrolling, act like a presentation */
+            color: var(--text-main);
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Hanken Grotesk', sans-serif;
+        }
+
+        /* Presentation Wrapper */
+        .presentation-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        /* 16:9 Aspect Ratio Slide Container */
+        .slide-container {
+            position: relative;
+            width: 100%;
+            max-width: 160vh; /* Maintain 16:9 roughly */
+            aspect-ratio: 16 / 9;
+            background-color: var(--brand-ink);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        /* Top Progress Bar */
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--brand-orange);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Slides */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 5% 6%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95) translateX(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateX(0);
+            z-index: 10;
+        }
+
+        .slide.previous {
+            transform: scale(0.95) translateX(-20px);
+        }
+
+        /* Decorative Glows */
+        .glow {
+            position: absolute;
+            width: 60vh;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(238, 107, 47, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Layout Utilities */
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 4%;
+            font-size: 1.5vh;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--brand-muted);
+        }
+
+        .header-row .page-num { color: var(--brand-orange); }
+        .header-row .divider { height: 1px; flex-grow: 1; max-width: 100px; background: var(--brand-orange); margin-left: 10px; }
+
+        .slide-title {
+            font-size: 7vh;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 2vh;
+        }
+
+        .slide-title span { color: var(--brand-orange); }
+
+        .slide-subtitle {
+            font-size: 2.2vh;
+            color: var(--brand-muted);
+            max-width: 80%;
+            line-height: 1.5;
+            margin-bottom: 4vh;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4%; height: 100%; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3%; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3%; }
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2%; }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 3vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-icon {
+            width: 6vh;
+            height: 6vh;
+            border-radius: 12px;
+            background: rgba(238, 107, 47, 0.1);
+            color: var(--brand-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2vh;
+        }
+
+        .card-icon svg { width: 3vh; height: 3vh; }
+        
+        .card h3 { font-size: 2.5vh; margin-bottom: 1vh; font-weight: 700; }
+        .card p { font-size: 1.6vh; color: var(--brand-muted); line-height: 1.5; }
+
+        /* Metric Box */
+        .metric {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--brand-orange);
+            padding: 2vh 3vh;
+            border-radius: 0 12px 12px 0;
+        }
+        .metric-value { font-size: 5vh; font-weight: 900; color: var(--brand-orange); font-family: 'Hanken Grotesk'; line-height: 1; margin-bottom: 0.5vh; }
+        .metric-label { font-size: 1.5vh; color: var(--brand-muted); font-weight: 500; }
+
+        /* Quote */
+        .quote-box {
+            border-left: 4px solid var(--brand-orange);
+            padding-left: 3vh;
+            margin-top: 4vh;
+        }
+        .quote-text { font-size: 2vh; font-style: italic; color: #fff; line-height: 1.5; margin-bottom: 1.5vh; }
+        .quote-author { font-size: 1.5vh; color: var(--brand-orange); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* Navigation Controls */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .controls button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .controls button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--brand-orange);
+        }
+
+        .controls button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--brand-muted);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* Helper alignment classes */
+        .flex-center { display: flex; align-items: center; justify-content: center; height: 100%; }
+        .v-center { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .mt-auto { margin-top: auto; }
+        .gap-4 { gap: 4vh; }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.5vh 1.5vh;
+            background: rgba(238, 107, 47, 0.1);
+            color: var(--brand-orange);
+            border-radius: 50px;
+            font-size: 1.4vh;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2vh;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="presentation-wrapper">
+        <div class="slide-container">
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <!-- SLIDE 1: COVER -->
+            <div class="slide active">
+                <div class="glow" style="top: -20%; right: -10%;"></div>
+                <div class="slide-content v-center">
+                    <div class="header-row">
+                        <span class="page-num">01</span>
+                        <span>KlarityOps Operational Infrastructure</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="v-center">
+                            <h1 class="slide-title" style="font-size: 9vh;">Scale with <span>systems.</span><br>Not operational chaos.</h1>
+                            <p class="slide-subtitle" style="font-size: 2.5vh; max-width: 90%;">KlarityOps designs operational infrastructure for scaling DTC and eCommerce brands using Asana-powered systems, automation layers, and executive visibility frameworks.</p>
+                        </div>
+                        <div class="v-center">
+                            <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(238,107,47,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+                                <h3 style="font-size: 2vh; color: var(--brand-orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4vh;">Proven Results</h3>
+                                <div class="grid-2" style="gap: 2vh;">
+                                    <div class="metric">
+                                        <div class="metric-value">+42%</div>
+                                        <div class="metric-label">On-time delivery<br>rate improvement</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-value">90%</div>
+                                        <div class="metric-label">Reduction in<br>operational errors</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-value">50%</div>
+                                        <div class="metric-label">Redundant work<br>automated</div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-value">6+</div>
+                                        <div class="metric-label">Hours saved<br>weekly for leaders</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: WHO WE ARE -->
+            <div class="slide">
+                <div class="glow" style="bottom: -20%; left: -10%;"></div>
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">02</span>
+                        <span>Who We Are</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <h2 class="slide-title">Operational clarity <span>at scale.</span></h2>
+                    <p class="slide-subtitle">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
+
+                    <div class="grid-4 mt-auto" style="margin-bottom: 5vh;">
+                        <div class="card">
+                            <div class="card-icon"><i data-lucide="eye"></i></div>
+                            <h3>01. Visibility</h3>
+                            <p>Real-time operational awareness. Live dashboards, automated reporting, and executive-level visibility across teams, timelines, and delivery.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i data-lucide="layers"></i></div>
+                            <h3>02. Structure</h3>
+                            <p>Systems that scale with your brand. Scalable workflows, automation layers, SOPs, and execution frameworks tailored to your operations.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i data-lucide="crosshair"></i></div>
+                            <h3>03. Alignment</h3>
+                            <p>Cross-functional execution alignment. Clear ownership, <strong>project & program management</strong>, and operational accountability embedded into every workflow.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon"><i data-lucide="zap"></i></div>
+                            <h3>04. Efficiency</h3>
+                            <p>Replace reactive operations. Reduce operational friction, eliminate unnecessary meetings, and leverage <strong>operational automation & AI adoption</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: ARCHITECTURE -->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">03</span>
+                        <span>Operational Architecture</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h2 class="slide-title">Operational<br><span>architecture</span> layers.</h2>
+                            <p class="slide-subtitle">KlarityOps designs infrastructure layers that bring clarity, automation, accountability, and scalability into growing DTC organizations.</p>
+                            
+                            <div class="quote-box" style="border-left-color: rgba(255,255,255,0.2);">
+                                <div class="quote-text" style="color: var(--brand-muted); font-style: normal;">
+                                    "We build for founder autonomy - helping founders extract themselves from daily operations through structured workspace architecture."
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 2vh;">
+                            <div class="card" style="flex-direction: row; align-items: center; gap: 3vh; padding: 2vh 3vh;">
+                                <div class="font-display" style="font-size: 4vh; font-weight: 900; color: var(--brand-orange); opacity: 0.8;">01</div>
+                                <div>
+                                    <h3 style="font-size: 2vh; margin-bottom: 0.5vh;">System Design</h3>
+                                    <p style="font-size: 1.4vh;">Custom Asana workspaces built around your org structure, team functions, and execution goals.</p>
+                                </div>
+                            </div>
+                            <div class="card" style="flex-direction: row; align-items: center; gap: 3vh; padding: 2vh 3vh;">
+                                <div class="font-display" style="font-size: 4vh; font-weight: 900; color: var(--brand-orange); opacity: 0.8;">02</div>
+                                <div>
+                                    <h3 style="font-size: 2vh; margin-bottom: 0.5vh;">Process Setup</h3>
+                                    <p style="font-size: 1.4vh;">Efficient workflows, automations, and templates that eliminate busywork and manual coordination.</p>
+                                </div>
+                            </div>
+                            <div class="card" style="flex-direction: row; align-items: center; gap: 3vh; padding: 2vh 3vh;">
+                                <div class="font-display" style="font-size: 4vh; font-weight: 900; color: var(--brand-orange); opacity: 0.8;">03</div>
+                                <div>
+                                    <h3 style="font-size: 2vh; margin-bottom: 0.5vh;">Visibility Layer</h3>
+                                    <p style="font-size: 1.4vh;">Real-time dashboards and reporting that give leadership live insight into delivery and capacity.</p>
+                                </div>
+                            </div>
+                            <div class="card" style="flex-direction: row; align-items: center; gap: 3vh; padding: 2vh 3vh;">
+                                <div class="font-display" style="font-size: 4vh; font-weight: 900; color: var(--brand-orange); opacity: 0.8;">04</div>
+                                <div>
+                                    <h3 style="font-size: 2vh; margin-bottom: 0.5vh;">Scalability</h3>
+                                    <p style="font-size: 1.4vh;">Systems designed to grow with your business without adding operational complexity or headcount.</p>
+                                </div>
+                            </div>
+                            <div class="card" style="flex-direction: row; align-items: center; gap: 3vh; padding: 2vh 3vh;">
+                                <div class="font-display" style="font-size: 4vh; font-weight: 900; color: var(--brand-orange); opacity: 0.8;">05</div>
+                                <div>
+                                    <h3 style="font-size: 2vh; margin-bottom: 0.5vh;">Team Enablement</h3>
+                                    <p style="font-size: 1.4vh;">Hands-on training, SOPs, and documentation that ensure your team owns and runs the system independently.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: HOW WE WORK -->
+            <div class="slide">
+                <div class="glow" style="top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5;"></div>
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">04</span>
+                        <span>How We Work</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 6vh;">
+                        <h2 class="slide-title">Built for <span>execution.</span></h2>
+                        <p class="slide-subtitle" style="margin: 0 auto;">Our implementation process is structured for speed, operational adoption, and long-term scalability—from first discovery call to full team launch.</p>
+                    </div>
+
+                    <div class="grid-5" style="position: relative; margin-top: auto; margin-bottom: 10vh;">
+                        <!-- Timeline connecting line -->
+                        <div style="position: absolute; top: 4vh; left: 10%; right: 10%; height: 2px; background: rgba(255,255,255,0.1); z-index: 0;"></div>
+                        
+                        <div style="text-align: center; position: relative; z-index: 1;">
+                            <div class="card-icon" style="margin: 0 auto 2vh; background: var(--brand-ink); border: 2px solid var(--brand-orange); border-radius: 50%; width: 8vh; height: 8vh;">
+                                <span class="font-display" style="font-size: 3vh; font-weight: 900; color: #fff;">01</span>
+                            </div>
+                            <h3 style="font-size: 2.2vh; margin-bottom: 1vh;">Discover</h3>
+                            <p style="font-size: 1.4vh; color: var(--brand-muted);">Understand workflows, pain points, and leadership objectives.</p>
+                        </div>
+                        
+                        <div style="text-align: center; position: relative; z-index: 1;">
+                            <div class="card-icon" style="margin: 0 auto 2vh; background: var(--brand-ink); border: 2px solid var(--brand-orange); border-radius: 50%; width: 8vh; height: 8vh;">
+                                <span class="font-display" style="font-size: 3vh; font-weight: 900; color: #fff;">02</span>
+                            </div>
+                            <h3 style="font-size: 2.2vh; margin-bottom: 1vh;">Design</h3>
+                            <p style="font-size: 1.4vh; color: var(--brand-muted);">Architect custom systems around your business structure.</p>
+                        </div>
+                        
+                        <div style="text-align: center; position: relative; z-index: 1;">
+                            <div class="card-icon" style="margin: 0 auto 2vh; background: var(--brand-ink); border: 2px solid var(--brand-orange); border-radius: 50%; width: 8vh; height: 8vh;">
+                                <span class="font-display" style="font-size: 3vh; font-weight: 900; color: #fff;">03</span>
+                            </div>
+                            <h3 style="font-size: 2.2vh; margin-bottom: 1vh;">Build</h3>
+                            <p style="font-size: 1.4vh; color: var(--brand-muted);">Implement workflows, automations, dashboards, and integrations.</p>
+                        </div>
+                        
+                        <div style="text-align: center; position: relative; z-index: 1;">
+                            <div class="card-icon" style="margin: 0 auto 2vh; background: var(--brand-ink); border: 2px solid var(--brand-orange); border-radius: 50%; width: 8vh; height: 8vh;">
+                                <span class="font-display" style="font-size: 3vh; font-weight: 900; color: #fff;">04</span>
+                            </div>
+                            <h3 style="font-size: 2.2vh; margin-bottom: 1vh;">Enable</h3>
+                            <p style="font-size: 1.4vh; color: var(--brand-muted);">Train teams and embed operational best practices.</p>
+                        </div>
+                        
+                        <div style="text-align: center; position: relative; z-index: 1;">
+                            <div class="card-icon" style="margin: 0 auto 2vh; background: var(--brand-ink); border: 2px solid var(--brand-orange); border-radius: 50%; width: 8vh; height: 8vh;">
+                                <span class="font-display" style="font-size: 3vh; font-weight: 900; color: #fff;">05</span>
+                            </div>
+                            <h3 style="font-size: 2.2vh; margin-bottom: 1vh;">Optimize</h3>
+                            <p style="font-size: 1.4vh; color: var(--brand-muted);">Continuously refine and improve operational performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: CASE STUDY - SOLAWAVE -->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">05</span>
+                        <span>Case Study 01</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="v-center">
+                            <span class="badge">DTC Skincare E-Commerce</span>
+                            <h2 class="slide-title" style="font-size: 8vh;">Solawave</h2>
+                            <p class="slide-subtitle">A scaling skincare brand seeking operational consistency across cross-functional teams with zero executive visibility and fragmented execution.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.05); padding: 3vh; border-radius: 12px; border-left: 2px solid var(--brand-orange);">
+                                <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 1.4vh; letter-spacing: 0.1em; margin-bottom: 1vh;">The Engagement</h4>
+                                <p style="font-size: 1.8vh; color: #ccc; line-height: 1.5;">Built a company-wide Asana operating system, implemented OKR structures, and standardized cross-functional delivery workflows across marketing, product, and operations teams.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="v-center">
+                            <h3 style="font-family: 'Hanken Grotesk'; font-size: 3vh; margin-bottom: 4vh; font-weight: 800;">Outcomes Delivered</h3>
+                            <div class="grid-2" style="gap: 3vh;">
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">90%</div>
+                                    <div class="metric-label">Operational errors<br>reduced</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">25%</div>
+                                    <div class="metric-label">Delivery speed<br>improvement</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">50%</div>
+                                    <div class="metric-label">Redundant work<br>automated</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">100%</div>
+                                    <div class="metric-label">Executive visibility<br>across operations</div>
+                                </div>
+                            </div>
+                            
+                            <div class="quote-box">
+                                <div class="quote-text">"The visibility and operational consistency we gained completely changed how our teams execute across departments."</div>
+                                <div class="quote-author">Operations Leadership, Solawave</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: CASE STUDY - ROOSTY'S -->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">06</span>
+                        <span>Case Study 02</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="v-center">
+                            <span class="badge">Wellness • $10M+ Revenue • Shopify Plus</span>
+                            <h2 class="slide-title" style="font-size: 8vh;">Roosty's</h2>
+                            <p class="slide-subtitle">A $10M+ wellness brand scaling supply chain operations and consolidating its entire tech stack into a single Asana operating system.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.05); padding: 3vh; border-radius: 12px; border-left: 2px solid var(--brand-orange);">
+                                <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 1.4vh; letter-spacing: 0.1em; margin-bottom: 1vh;">The Challenge</h4>
+                                <p style="font-size: 1.8vh; color: #ccc; line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Creative brief standardization was absent. Supply chain had no executive visibility layer, and the ops team ran on tribal knowledge.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="v-center">
+                            <h3 style="font-family: 'Hanken Grotesk'; font-size: 3vh; margin-bottom: 4vh; font-weight: 800;">Outcomes Delivered</h3>
+                            <div class="grid-2" style="gap: 3vh;">
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value" style="font-size: 4vh;">3 Wks</div>
+                                    <div class="metric-label">Full migration<br>from ClickUp</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">100%</div>
+                                    <div class="metric-label">Operations migrated<br>into Asana</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value" style="font-size: 4vh;">Live</div>
+                                    <div class="metric-label">Inventory visibility<br>dashboards</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value" style="font-size: 4vh;">Unified</div>
+                                    <div class="metric-label">Centralized execution<br>systems</div>
+                                </div>
+                            </div>
+                            
+                            <div class="quote-box">
+                                <div class="quote-text">"Klarity Ops helped us unify operations into a single scalable system with complete visibility across teams."</div>
+                                <div class="quote-author">Operations Lead, Roosty's</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: CASE STUDY - PRIDOLA -->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">07</span>
+                        <span>Case Study 03</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="v-center">
+                            <span class="badge">E-Commerce • Shopify Plus</span>
+                            <h2 class="slide-title" style="font-size: 8vh;">Pridola</h2>
+                            <p class="slide-subtitle">An e-commerce brand that permanently eliminated weekly status meetings by replacing them with a live Asana operational dashboard.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.05); padding: 3vh; border-radius: 12px; border-left: 2px solid var(--brand-orange);">
+                                <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 1.4vh; letter-spacing: 0.1em; margin-bottom: 1vh;">The Engagement</h4>
+                                <p style="font-size: 1.8vh; color: #ccc; line-height: 1.5;">Built a custom Asana ops dashboard with automated task-level reporting. Every team member received a defined swim lane. Every manager received a live portfolio view. Status meetings were permanently cancelled.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="v-center">
+                            <h3 style="font-family: 'Hanken Grotesk'; font-size: 3vh; margin-bottom: 4vh; font-weight: 800;">Outcomes Delivered</h3>
+                            <div class="grid-2" style="gap: 3vh;">
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">0</div>
+                                    <div class="metric-label">Status meetings<br>per week</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">6+</div>
+                                    <div class="metric-label">Leadership hours<br>saved weekly</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">42%</div>
+                                    <div class="metric-label">On-time delivery<br>improvement</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">100%</div>
+                                    <div class="metric-label">Project updates<br>automated</div>
+                                </div>
+                            </div>
+                            
+                            <div class="quote-box">
+                                <div class="quote-text">"The dashboard became our single source of truth. We haven't had a status meeting in months, and nothing slipped."</div>
+                                <div class="quote-author">COO, Pridola</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: CASE STUDY - BLACK & BLACK -->
+            <div class="slide">
+                <div class="slide-content">
+                    <div class="header-row">
+                        <span class="page-num">08</span>
+                        <span>Case Study 04</span>
+                        <div class="divider"></div>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="v-center">
+                            <span class="badge">E-Commerce Agency</span>
+                            <h2 class="slide-title" style="font-size: 8vh;">Black & Black</h2>
+                            <p class="slide-subtitle">A digital commerce agency focused on improving delivery efficiency and client outcomes.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.05); padding: 3vh; border-radius: 12px; border-left: 2px solid var(--brand-orange);">
+                                <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 1.4vh; letter-spacing: 0.1em; margin-bottom: 1vh;">The Engagement</h4>
+                                <p style="font-size: 1.8vh; color: #ccc; line-height: 1.5;">Led project management and optimized workflows using Asana to streamline delivery and coordination for Shopify and e-commerce projects.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="v-center">
+                            <h3 style="font-family: 'Hanken Grotesk'; font-size: 3vh; margin-bottom: 4vh; font-weight: 800;">Outcomes Delivered</h3>
+                            <div class="grid-2" style="gap: 3vh;">
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">40%</div>
+                                    <div class="metric-label">Reduction in<br>manual effort</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value">95%</div>
+                                    <div class="metric-label">Client satisfaction<br>rate achieved</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value" style="font-size: 4vh;">Faster</div>
+                                    <div class="metric-label">Shortened delivery<br>timelines</div>
+                                </div>
+                                <div class="metric" style="background: none; border-left: none; border-top: 3px solid var(--brand-orange); padding: 2vh 0;">
+                                    <div class="metric-value" style="font-size: 4vh;">Optimized</div>
+                                    <div class="metric-label">Project management<br>workflows</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9: IMPACT & CONNECT -->
+            <div class="slide">
+                <div class="glow" style="top: 0; left: 0; transform: scale(1.5);"></div>
+                <div class="slide-content v-center flex-center" style="text-align: center;">
+                    <h2 class="slide-title" style="font-size: 9vh;">Let's build<br><span style="color: var(--brand-orange);">what scales.</span></h2>
+                    <p class="slide-subtitle" style="margin: 0 auto 6vh; max-width: 60%; font-size: 2.5vh;">You have the vision. We build the systems that make it real and sustainable. Let's create operational clarity, unlock performance, and scale with confidence.</p>
+                    
+                    <div class="grid-4" style="text-align: left; max-width: 90%; margin: 0 auto;">
+                        <div class="card" style="align-items: center; text-align: center;">
+                            <div class="card-icon"><i data-lucide="search"></i></div>
+                            <h4 style="font-size: 1.8vh; margin-bottom: 1vh; font-weight: 700;">Systems Audit</h4>
+                            <p style="font-size: 1.4vh;">Evaluate current operations and identify gaps & risks.</p>
+                        </div>
+                        <div class="card" style="align-items: center; text-align: center;">
+                            <div class="card-icon"><i data-lucide="pen-tool"></i></div>
+                            <h4 style="font-size: 1.8vh; margin-bottom: 1vh; font-weight: 700;">Design & Build</h4>
+                            <p style="font-size: 1.4vh;">Architect and implement custom Asana systems.</p>
+                        </div>
+                        <div class="card" style="align-items: center; text-align: center;">
+                            <div class="card-icon"><i data-lucide="users"></i></div>
+                            <h4 style="font-size: 1.8vh; margin-bottom: 1vh; font-weight: 700;">Team Training</h4>
+                            <p style="font-size: 1.4vh;">Onboard your team and embed best practices.</p>
+                        </div>
+                        <div class="card" style="align-items: center; text-align: center;">
+                            <div class="card-icon"><i data-lucide="refresh-cw"></i></div>
+                            <h4 style="font-size: 1.8vh; margin-bottom: 1vh; font-weight: 700;">Optimization</h4>
+                            <p style="font-size: 1.4vh;">Continuously refine and automate as you scale.</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 6vh;">
+                        <a href="#" style="display: inline-flex; align-items: center; gap: 10px; background: var(--brand-orange); color: #fff; text-decoration: none; padding: 2vh 4vh; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 1.8vh;">
+                            Book a Discovery Call <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Presentation Controls -->
+        <div class="controls">
+            <button id="prevBtn" title="Previous Slide (Left Arrow)"><i data-lucide="chevron-left"></i></button>
+            <span class="slide-counter" id="slideCounter">1 / 9</span>
+            <button id="nextBtn" title="Next Slide (Right Arrow/Space)"><i data-lucide="chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Presentation Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const counter = document.getElementById('slideCounter');
+            const progressBar = document.getElementById('progressBar');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function updatePresentation() {
+                // Update Slides
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'previous');
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    } else if (index < currentSlide) {
+                        slide.classList.add('previous');
+                    }
+                });
+
+                // Update Controls
+                counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === totalSlides - 1;
+
+                // Update Progress Bar
+                const progressPercentage = ((currentSlide + 1) / totalSlides) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+            }
+
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updatePresentation();
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updatePresentation();
+                }
+            }
+
+            // Event Listeners for Buttons
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            // Keyboard Navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === ' ') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                }
+            });
+
+            // Initialize
+            updatePresentation();
+        });
+    </script>
+</body>
+</html>
