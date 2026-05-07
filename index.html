@@ -3,29 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KlarityOps | Operational Infrastructure</title>
+    <title>KlarityOps | Executive Briefing</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* CSS Reset & Variables (Light Mode) */
+        /* CSS Reset & Enterprise Variables */
         :root {
-            --brand-orange: #EE6B2F;
-            --brand-orange-light: #fce3d5;
-            --brand-ink: #0A0A0A;
-            --brand-navy: #0E2042;
-            --brand-bg: #FBF3E7;
-            --brand-surface: #FFFFFF;
-            --brand-muted: #506182;
-            --brand-border: #E5D5C5;
-            --text-main: #0A0A0A;
-            --text-secondary: #506182;
+            /* Executive Color Palette */
+            --brand-orange: #E85D04; /* Sharper, deeper orange */
+            --brand-orange-light: rgba(232, 93, 4, 0.08);
+            --brand-orange-hover: #D05303;
+            
+            --brand-navy: #0A192F; /* Deep authoritative navy */
+            --brand-ink: #111827; /* Slate black for main text */
+            
+            --bg-main: #F8F9FA; /* Crisp, cool off-white */
+            --bg-surface: #FFFFFF; /* Pure white for cards */
+            
+            --text-main: #111827;
+            --text-secondary: #4B5563;
+            --text-tertiary: #9CA3AF;
+            
+            --border-light: #E5E7EB;
+            --border-dark: #D1D5DB;
+            
+            /* Premium Easing */
+            --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
         }
 
         * {
@@ -37,10 +52,12 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: var(--brand-bg);
+            background-color: var(--bg-main);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         h1, h2, h3, h4, h5, h6, .font-display {
@@ -57,21 +74,28 @@
             scroll-behavior: smooth;
         }
 
-        /* Slide Core */
+        /* Slide Core - Technical Dot Grid */
         .slide {
             width: 100%;
             min-height: 100vh;
             scroll-snap-align: start;
-            padding: 60px 20px 100px;
+            padding: 80px 24px 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
-            background-image: 
-                linear-gradient(to right, rgba(14, 32, 66, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(14, 32, 66, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: radial-gradient(var(--border-light) 1px, transparent 1px);
+            background-size: 24px 24px;
             overflow: hidden;
+        }
+
+        /* Subtle precise line elements instead of glowing orbs */
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 24px; width: 1px; height: 100%;
+            background: var(--border-light);
+            z-index: 0;
         }
 
         /* Slide Content Wrapper */
@@ -83,241 +107,269 @@
             z-index: 2;
         }
 
-        /* Decorative Glows */
-        .glow-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(238,107,47,0.08) 0%, rgba(238,107,47,0) 70%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Header Row */
-        .header-row {
-            display: flex;
+        /* Kicker / Header Row */
+        .kicker {
+            display: inline-flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 2rem;
-            font-size: 0.875rem;
+            gap: 12px;
+            padding: 6px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dark);
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--brand-muted);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-sm);
         }
-
-        .header-row .page-num { color: var(--brand-orange); }
-        .header-row .divider { height: 2px; flex-grow: 1; max-width: 60px; background: var(--brand-orange); border-radius: 2px; }
+        .kicker .page-num { color: var(--brand-orange); font-weight: 900; }
+        .kicker .dot { width: 4px; height: 4px; background: var(--brand-orange); border-radius: 50%; }
 
         /* Typography */
         .slide-title {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 900;
+            font-weight: 800;
             line-height: 1.05;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.2rem;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            color: var(--brand-ink);
         }
 
-        .slide-title span { color: var(--brand-orange); position: relative; }
-        .slide-title span::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: var(--brand-orange-light);
-            z-index: -1;
-            border-radius: 4px;
-        }
+        .slide-title span { color: var(--brand-orange); }
 
         .slide-subtitle {
             font-size: clamp(1.1rem, 2vw, 1.25rem);
             color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 2rem;
-            max-width: 800px;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            font-weight: 400;
         }
 
         /* Layout Grids */
-        .grid-1-2 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        .grid-1-2 { display: grid; grid-template-columns: 1fr; gap: 3rem; }
         .grid-cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 
         @media (min-width: 768px) {
             .grid-1-2 { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-            .grid-cards { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .grid-cards { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
         }
 
         @media (min-width: 1024px) {
             .grid-cards-4 { grid-template-columns: repeat(4, 1fr); }
             .grid-cards-5 { grid-template-columns: repeat(5, 1fr); }
-            .slide { padding: 60px; height: 100vh; }
+            .slide { padding: 60px 40px; height: 100vh; }
             .presentation-container { scroll-snap-type: y mandatory; }
             .desktop-v-center { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+            .slide::after { left: 40px; }
         }
 
-        /* Cards */
-        .card {
-            background: var(--brand-surface);
-            border: 1px solid var(--brand-border);
-            border-radius: 16px;
-            padding: 1.8rem;
-            box-shadow: 0 4px 20px rgba(14, 32, 66, 0.04);
+        /* Bento Box / Enterprise Cards */
+        .bento-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
+            transition: all 0.4s var(--ease-spring);
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--brand-orange);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
+        .bento-card:hover {
+            border-color: var(--border-dark);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
 
-        .card:hover::before { transform: scaleX(1); }
-        .card:hover { border-color: var(--brand-orange-light); box-shadow: 0 10px 30px rgba(238, 107, 47, 0.08); }
-
-        .card-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
             background: var(--brand-orange-light);
             color: var(--brand-orange);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(232, 93, 4, 0.15);
         }
 
-        .card h3 { font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800; color: var(--brand-navy); }
-        .card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
+        .bento-card h3 { font-size: 1.15rem; margin-bottom: 0.75rem; font-weight: 700; color: var(--brand-ink); letter-spacing: -0.01em; }
+        .bento-card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
 
-        /* Enhanced Metrics & Charts */
-        .metric-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
-        @media (min-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
-        
-        .metric-box {
-            background: var(--brand-surface);
-            padding: 1.5rem;
+        /* Structured Metrics Grid (Bento Style) */
+        .metrics-bento {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            background: var(--border-light); /* Acts as 1px borders */
+            border: 1px solid var(--border-light);
             border-radius: 12px;
-            border: 1px solid var(--brand-border);
-            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        @media (min-width: 600px) {
+            .metrics-bento { grid-template-columns: 1fr 1fr; }
         }
 
-        .metric-value { font-size: 2.5rem; font-weight: 900; color: var(--brand-navy); font-family: 'Hanken Grotesk'; line-height: 1; margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 4px;}
-        .metric-value span { color: var(--brand-orange); font-size: 1.5rem; }
+        .metric-cell {
+            background: var(--bg-surface);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .metric-value { 
+            font-size: 2.75rem; 
+            font-weight: 800; 
+            color: var(--brand-ink); 
+            font-family: 'Hanken Grotesk'; 
+            line-height: 1; 
+            margin-bottom: 0.75rem; 
+            display: flex; 
+            align-items: baseline; 
+            gap: 4px;
+            letter-spacing: -0.03em;
+        }
+        .metric-value span { color: var(--brand-orange); font-size: 1.5rem; font-weight: 700;}
         .metric-label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         
-        /* Progress Bar Visualization */
-        .bar-chart { margin-top: 15px; width: 100%; height: 6px; background: var(--brand-bg); border-radius: 3px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--brand-orange); border-radius: 3px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        /* Razor-thin Progress Bar (Static Version) */
+        .bar-chart { margin-top: 1rem; width: 100%; height: 4px; background: var(--bg-main); border-radius: 2px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--brand-orange); border-radius: 2px; }
 
-        /* Quotes */
-        .quote-box {
-            border-left: 4px solid var(--brand-orange);
-            background: linear-gradient(to right, rgba(238, 107, 47, 0.05), transparent);
-            padding: 1.5rem 2rem;
-            border-radius: 0 16px 16px 0;
+        /* Executive Quote */
+        .quote-block {
+            border-left: 3px solid var(--brand-orange);
+            padding: 0 0 0 1.5rem;
             margin-top: 2rem;
         }
-        .quote-text { font-size: 1.15rem; font-style: italic; color: var(--brand-navy); line-height: 1.6; margin-bottom: 1rem; }
-        .quote-author { font-size: 0.875rem; color: var(--brand-orange); font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+        .quote-text { font-size: 1.25rem; font-style: italic; color: var(--brand-ink); line-height: 1.5; margin-bottom: 1rem; font-weight: 500;}
+        .quote-author { font-size: 0.85rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 
         /* Badges */
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 0.35rem 1rem;
-            background: var(--brand-navy);
-            color: #fff;
-            border-radius: 50px;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dark);
+            color: var(--brand-ink);
+            border-radius: 4px;
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
             margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
         }
+        .badge i { color: var(--brand-orange); width: 14px; height: 14px;}
 
-        /* Process Timeline */
-        .timeline { position: relative; display: flex; flex-direction: column; gap: 20px; }
-        .timeline::before { content: ''; position: absolute; left: 27px; top: 0; bottom: 0; width: 2px; background: var(--brand-border); z-index: 0; }
+        /* Precise Timeline */
+        .timeline { display: flex; flex-direction: column; gap: 1rem; position: relative; }
         @media(min-width: 1024px) {
-            .timeline { flex-direction: row; justify-content: space-between; gap: 0; margin-top: 3rem; }
-            .timeline::before { left: 0; top: 27px; right: 0; bottom: auto; height: 2px; width: 100%; }
+            .timeline { flex-direction: row; gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-top: 2rem;}
         }
-        .timeline-step { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 20px; }
+        .timeline-step { 
+            background: var(--bg-surface); 
+            padding: 2rem; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+        }
         @media(min-width: 1024px) {
-            .timeline-step { flex-direction: column; align-items: center; text-align: center; flex: 1; gap: 15px; padding: 0 10px; }
+            .timeline-step { flex: 1; border: none; border-radius: 0; }
         }
-        .timeline-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--brand-surface); border: 2px solid var(--brand-orange); color: var(--brand-orange); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(238,107,47,0.15); }
-        .timeline-content h3 { font-size: 1.1rem; margin-bottom: 5px; font-weight: 800; color: var(--brand-navy); }
-        .timeline-content p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
+        .step-num { font-family: 'Hanken Grotesk'; font-size: 0.85rem; font-weight: 800; color: var(--brand-orange); margin-bottom: 1rem; letter-spacing: 0.1em; }
+        .timeline-step h3 { font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700; color: var(--brand-ink); }
+        .timeline-step p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
 
-        /* Architecture Stack */
-        .arch-stack { display: flex; flex-direction: column; gap: 12px; perspective: 1000px; }
-        .arch-layer { background: var(--brand-surface); border: 1px solid var(--brand-border); padding: 1.2rem 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s; }
-        .arch-layer:hover { transform: translateX(10px); border-color: var(--brand-orange-light); }
-        .arch-num { font-size: 1.5rem; font-weight: 900; color: var(--brand-orange); background: var(--brand-orange-light); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; flex-shrink: 0;}
+        /* Architectural Stack */
+        .arch-stack { display: flex; flex-direction: column; gap: 1rem; }
+        .arch-layer { 
+            background: var(--bg-surface); 
+            border: 1px solid var(--border-light); 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 1.5rem; 
+            box-shadow: var(--shadow-sm); 
+            transition: transform 0.4s var(--ease-spring), border-color 0.4s;
+        }
+        .arch-layer:hover { transform: translateX(8px); border-color: var(--brand-orange); }
+        .arch-icon { color: var(--brand-orange); width: 24px; height: 24px; flex-shrink: 0; }
         
-        /* Navigation Controls */
+        /* Navigation Controls - Minimalist */
         .controls {
             position: fixed;
-            bottom: 25px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 1px solid var(--brand-border);
-            box-shadow: 0 10px 30px rgba(14,32,66,0.1);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 8px;
+            border-radius: 100px;
+            border: 1px solid var(--border-dark);
+            box-shadow: var(--shadow-lg);
             z-index: 1000;
         }
 
         .controls button {
-            background: var(--brand-bg);
-            border: 1px solid var(--brand-border);
-            color: var(--brand-navy);
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             transition: all 0.2s;
         }
 
-        .controls button:hover:not(:disabled) { background: var(--brand-orange); color: white; border-color: var(--brand-orange); transform: scale(1.05); }
-        .controls button:disabled { opacity: 0.4; cursor: not-allowed; }
-        .slide-counter { font-size: 0.9rem; font-weight: 800; color: var(--brand-navy); min-width: 50px; text-align: center; font-family: 'Hanken Grotesk'; }
+        .controls button:hover:not(:disabled) { background: var(--border-light); color: var(--brand-ink); }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .slide-counter { font-size: 0.85rem; font-weight: 600; color: var(--brand-ink); padding: 0 12px; font-variant-numeric: tabular-nums; }
 
         /* Progress Bar Top */
-        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: rgba(0, 0, 0, 0.05); z-index: 1001; }
-        .progress-bar { height: 100%; background: var(--brand-orange); width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: var(--border-light); z-index: 1001; }
+        .progress-bar { height: 100%; background: var(--brand-orange); width: 0%; transition: width 0.1s linear; }
 
-        /* --- Scroll Animations --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-        .reveal-left { opacity: 0; transform: translateX(-40px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-        .reveal-right { opacity: 0; transform: translateX(40px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-        
-        .active .reveal { opacity: 1; transform: translateY(0); }
-        .active .reveal-left { opacity: 1; transform: translateX(0); }
-        .active .reveal-right { opacity: 1; transform: translateX(0); }
-        
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
-
+        /* Primary Button */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--brand-ink);
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 4px; /* Sharp corners for executive feel */
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s var(--ease-spring);
+            border: 1px solid var(--brand-ink);
+        }
+        .btn-primary:hover {
+            background: var(--bg-surface);
+            color: var(--brand-ink);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
     </style>
 </head>
 <body>
@@ -330,47 +382,43 @@
 
         <!-- SLIDE 1: COVER -->
         <section class="slide" id="slide-1">
-            <div class="glow-circle" style="width: 800px; height: 800px; top: -200px; right: -200px;"></div>
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">01</span>
-                    <span>KlarityOps • Operational Infrastructure</span>
-                    <div class="divider"></div>
+                    <span>Executive Summary</span>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
+                    <div>
                         <h1 class="slide-title">Scale with <span>systems.</span><br>Not operational chaos.</h1>
-                        <p class="slide-subtitle">We design operational infrastructure for scaling DTC and eCommerce brands using Asana-powered systems, automation layers, and executive visibility frameworks.</p>
-                        <a href="#slide-10" style="display: inline-flex; align-items: center; gap: 10px; background: var(--brand-orange); color: white; text-decoration: none; padding: 14px 28px; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem; box-shadow: 0 8px 20px rgba(238, 107, 47, 0.3); transition: transform 0.2s;">
-                            Start Building <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                        <p class="slide-subtitle">We design operational infrastructure for scaling DTC and eCommerce brands. Replace fragmented execution with structured Asana-powered systems, automation layers, and executive visibility frameworks.</p>
+                        <a href="#slide-10" class="btn-primary">
+                            Initiate Engagement <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
                         </a>
                     </div>
                     
-                    <div class="card reveal-right delay-200" style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);">
-                        <h3 style="color: var(--brand-orange); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="bar-chart-2" style="width: 18px;"></i> Proven Aggregate Results
-                        </h3>
-                        <div class="metric-grid">
-                            <div class="metric-box">
+                    <div>
+                        <div class="metrics-bento">
+                            <div class="metric-cell">
                                 <div class="metric-value">42<span>%</span></div>
                                 <div class="metric-label">On-time delivery inc.</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 42%;" data-target="42%"></div></div>
+                                <div class="bar-chart"><div class="bar-fill" style="width: 42%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">90<span>%</span></div>
                                 <div class="metric-label">Error reduction</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 90%;" data-target="90%"></div></div>
+                                <div class="bar-chart"><div class="bar-fill" style="width: 90%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">50<span>%</span></div>
                                 <div class="metric-label">Work automated</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 50%;" data-target="50%"></div></div>
+                                <div class="bar-chart"><div class="bar-fill" style="width: 50%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">6<span>+ hr</span></div>
-                                <div class="metric-label">Saved per week</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 80%;" data-target="80%"></div></div>
+                                <div class="metric-label">Saved weekly (Exec)</div>
+                                <div class="bar-chart"><div class="bar-fill" style="width: 80%;"></div></div>
                             </div>
                         </div>
                     </div>
@@ -381,38 +429,38 @@
         <!-- SLIDE 2: WHO WE ARE -->
         <section class="slide" id="slide-2">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">02</span>
-                    <span>Who We Are</span>
-                    <div class="divider"></div>
+                    <span>Core Philosophy</span>
                 </div>
                 
-                <h2 class="slide-title reveal delay-100">Operational clarity <span>at scale.</span></h2>
-                <p class="slide-subtitle reveal delay-200">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
+                <h2 class="slide-title">Operational clarity <span>at scale.</span></h2>
+                <p class="slide-subtitle">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
 
                 <div class="grid-cards grid-cards-5 mt-4">
-                    <div class="card reveal delay-100">
-                        <div class="card-icon"><i data-lucide="crosshair"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="crosshair"></i></div>
                         <h3>Focus</h3>
                         <p>Eliminate chaos and bring focus back to strategies that actually move the needle.</p>
                     </div>
-                    <div class="card reveal delay-200">
-                        <div class="card-icon"><i data-lucide="layers"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="layers"></i></div>
                         <h3>Structure</h3>
                         <p>Design scalable systems that strictly align your people, processes, and priorities.</p>
                     </div>
-                    <div class="card reveal delay-300">
-                        <div class="card-icon"><i data-lucide="eye"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="eye"></i></div>
                         <h3>Visibility</h3>
                         <p>Get real-time clarity across projects, team performance, and operational roadblocks.</p>
                     </div>
-                    <div class="card reveal delay-400">
-                        <div class="card-icon"><i data-lucide="trending-up"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="trending-up"></i></div>
                         <h3>Scale</h3>
                         <p>Build the foundational operational infrastructure to scale without adding complexity.</p>
                     </div>
-                    <div class="card reveal delay-500">
-                        <div class="card-icon"><i data-lucide="link"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="link"></i></div>
                         <h3>Alignment</h3>
                         <p>Create strict accountability and defined ownership across your entire cross-functional team.</p>
                     </div>
@@ -422,20 +470,19 @@
 
         <!-- SLIDE 3: ARCHITECTURE -->
         <section class="slide" id="slide-3">
-            <div class="glow-circle" style="width: 600px; height: 600px; top: 50%; left: 0; transform: translateY(-50%);"></div>
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">03</span>
                     <span>Operational Architecture</span>
-                    <div class="divider"></div>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
+                    <div>
                         <h2 class="slide-title">Architecture<br><span>layers.</span></h2>
-                        <p class="slide-subtitle">We build for founder autonomy—helping founders extract themselves from daily operations through structured workspace architecture.</p>
+                        <p class="slide-subtitle">We build for founder autonomy—helping leadership extract themselves from daily operations through structured, reliable workspace architecture.</p>
                         
-                        <div class="quote-box">
+                        <div class="quote-block">
                             <div class="quote-text">
                                 "KlarityOps designs infrastructure layers that bring clarity, automation, accountability, and scalability into growing organizations."
                             </div>
@@ -443,38 +490,38 @@
                     </div>
                     
                     <div class="arch-stack">
-                        <div class="arch-layer reveal-right delay-100">
-                            <div class="arch-num"><i data-lucide="layout-dashboard"></i></div>
+                        <div class="arch-layer">
+                            <i data-lucide="layout-dashboard" class="arch-icon"></i>
                             <div>
-                                <h3 style="font-size: 1.15rem; font-weight: 800;">System Design</h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">System Design</h3>
                                 <p style="font-size: 0.9rem; color: var(--text-secondary);">Custom Asana workspaces built around org structure.</p>
                             </div>
                         </div>
-                        <div class="arch-layer reveal-right delay-200">
-                            <div class="arch-num"><i data-lucide="git-merge"></i></div>
+                        <div class="arch-layer">
+                            <i data-lucide="git-merge" class="arch-icon"></i>
                             <div>
-                                <h3 style="font-size: 1.15rem; font-weight: 800;">Process Setup</h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Process Setup</h3>
                                 <p style="font-size: 0.9rem; color: var(--text-secondary);">Workflows and automations that eliminate busywork.</p>
                             </div>
                         </div>
-                        <div class="arch-layer reveal-right delay-300">
-                            <div class="arch-num"><i data-lucide="monitor-play"></i></div>
+                        <div class="arch-layer">
+                            <i data-lucide="monitor-play" class="arch-icon"></i>
                             <div>
-                                <h3 style="font-size: 1.15rem; font-weight: 800;">Visibility Layer</h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Visibility Layer</h3>
                                 <p style="font-size: 0.9rem; color: var(--text-secondary);">Dashboards giving leadership live execution insight.</p>
                             </div>
                         </div>
-                        <div class="arch-layer reveal-right delay-400">
-                            <div class="arch-num"><i data-lucide="maximize"></i></div>
+                        <div class="arch-layer">
+                            <i data-lucide="maximize" class="arch-icon"></i>
                             <div>
-                                <h3 style="font-size: 1.15rem; font-weight: 800;">Scalability</h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Scalability</h3>
                                 <p style="font-size: 0.9rem; color: var(--text-secondary);">Systems designed to grow without adding headcount.</p>
                             </div>
                         </div>
-                        <div class="arch-layer reveal-right delay-500">
-                            <div class="arch-num"><i data-lucide="users"></i></div>
+                        <div class="arch-layer">
+                            <i data-lucide="book-open" class="arch-icon"></i>
                             <div>
-                                <h3 style="font-size: 1.15rem; font-weight: 800;">Team Enablement</h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Team Enablement</h3>
                                 <p style="font-size: 0.9rem; color: var(--text-secondary);">SOPs and documentation for independent execution.</p>
                             </div>
                         </div>
@@ -486,50 +533,40 @@
         <!-- SLIDE 4: METHODOLOGY -->
         <section class="slide" id="slide-4">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">04</span>
-                    <span>Methodology</span>
-                    <div class="divider"></div>
+                    <span>Implementation</span>
                 </div>
                 
-                <h2 class="slide-title reveal delay-100">Built for <span>execution.</span></h2>
-                <p class="slide-subtitle reveal delay-200">Our approach is structured for speed, operational adoption, and long-term scalability—from the first discovery call to full team launch.</p>
+                <h2 class="slide-title">Built for <span>execution.</span></h2>
+                <p class="slide-subtitle">Our approach is structured for speed, operational adoption, and long-term scalability—from the first discovery call to full team launch.</p>
 
-                <div class="timeline reveal delay-300">
+                <div class="timeline">
                     <div class="timeline-step">
-                        <div class="timeline-icon"><i data-lucide="search"></i></div>
-                        <div class="timeline-content">
-                            <h3>1. Discovery</h3>
-                            <p>Deep dive into your teams, workflows, goals, and operational pain points.</p>
-                        </div>
+                        <div class="step-num">PHASE 01</div>
+                        <h3>Discovery</h3>
+                        <p>Deep dive into your teams, workflows, goals, and operational pain points.</p>
                     </div>
                     <div class="timeline-step">
-                        <div class="timeline-icon"><i data-lucide="file-check"></i></div>
-                        <div class="timeline-content">
-                            <h3>2. Standardization</h3>
-                            <p>Standardizing processes with templates, custom automations, and integrations.</p>
-                        </div>
+                        <div class="step-num">PHASE 02</div>
+                        <h3>Standardization</h3>
+                        <p>Standardizing processes with templates, custom automations, and integrations.</p>
                     </div>
                     <div class="timeline-step">
-                        <div class="timeline-icon"><i data-lucide="blocks"></i></div>
-                        <div class="timeline-content">
-                            <h3>3. Implementation</h3>
-                            <p>Building and refining tailored Asana architecture collaboratively with stakeholders.</p>
-                        </div>
+                        <div class="step-num">PHASE 03</div>
+                        <h3>Implementation</h3>
+                        <p>Building and refining tailored Asana architecture collaboratively with stakeholders.</p>
                     </div>
                     <div class="timeline-step">
-                        <div class="timeline-icon"><i data-lucide="graduation-cap"></i></div>
-                        <div class="timeline-content">
-                            <h3>4. Team Training</h3>
-                            <p>Onboarding your entire team through interactive, hands-on enablement sessions.</p>
-                        </div>
+                        <div class="step-num">PHASE 04</div>
+                        <h3>Team Training</h3>
+                        <p>Onboarding your entire team through interactive, hands-on enablement sessions.</p>
                     </div>
                     <div class="timeline-step">
-                        <div class="timeline-icon"><i data-lucide="bar-chart"></i></div>
-                        <div class="timeline-content">
-                            <h3>5. Metrics</h3>
-                            <p>Implementing executive dashboards and automated reporting for ongoing visibility.</p>
-                        </div>
+                        <div class="step-num">PHASE 05</div>
+                        <h3>Metrics</h3>
+                        <p>Implementing executive dashboards and automated reporting for ongoing visibility.</p>
                     </div>
                 </div>
             </div>
@@ -538,43 +575,43 @@
         <!-- SLIDE 5: CASE STUDY - SOLAWAVE -->
         <section class="slide" id="slide-5">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">05</span>
-                    <span>Case Study 01</span>
-                    <div class="divider"></div>
+                    <span>Business Case 01</span>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="shopping-bag" style="width: 14px;"></i> DTC Skincare E-Commerce</div>
+                    <div>
+                        <div class="badge"><i data-lucide="shopping-bag"></i> DTC Skincare E-Commerce</div>
                         <h2 class="slide-title">Solawave</h2>
                         <p class="slide-subtitle">A scaling skincare brand seeking operational consistency across cross-functional teams with zero executive visibility.</p>
                         
-                        <div class="card" style="background: var(--brand-surface); border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--brand-orange); border-radius: 0 12px 12px 0;">
-                            <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">The Engagement</h4>
-                            <p style="font-size: 0.95rem; color: var(--brand-navy); line-height: 1.5;">Built a company-wide Asana operating system, implemented OKR structures, and standardized delivery workflows across marketing, product, and operations.</p>
+                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
+                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Built a company-wide Asana operating system, implemented OKR structures, and standardized delivery workflows across marketing, product, and operations.</p>
                         </div>
                     </div>
                     
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 900;">Impact Delivered</h3>
-                        <div class="metric-grid">
-                            <div class="metric-box">
+                    <div>
+                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
+                        <div class="metrics-bento">
+                            <div class="metric-cell">
                                 <div class="metric-value">90<span>%</span></div>
                                 <div class="metric-label">Errors reduced</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 90%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">25<span>%</span></div>
                                 <div class="metric-label">Speed improved</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 25%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">50<span>%</span></div>
                                 <div class="metric-label">Work automated</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 50%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">100<span>%</span></div>
                                 <div class="metric-label">Exec visibility</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
@@ -588,42 +625,42 @@
         <!-- SLIDE 6: CASE STUDY - ROOSTY'S -->
         <section class="slide" id="slide-6">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">06</span>
-                    <span>Case Study 02</span>
-                    <div class="divider"></div>
+                    <span>Business Case 02</span>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="activity" style="width: 14px;"></i> Wellness • $10M+ Revenue</div>
+                    <div>
+                        <div class="badge"><i data-lucide="activity"></i> Wellness • $10M+ Revenue</div>
                         <h2 class="slide-title">Roosty's</h2>
                         <p class="slide-subtitle">A $10M+ wellness brand scaling supply chain operations and consolidating its entire tech stack into a single Asana OS.</p>
                         
-                        <div class="card" style="background: var(--brand-surface); border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--brand-orange); border-radius: 0 12px 12px 0;">
-                            <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">The Challenge</h4>
-                            <p style="font-size: 0.95rem; color: var(--brand-navy); line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Supply chain had no executive visibility layer, and the operations team ran entirely on tribal knowledge.</p>
+                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Challenge</h4>
+                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Supply chain had no executive visibility layer, and the operations team ran entirely on tribal knowledge.</p>
                         </div>
                     </div>
                     
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 900;">Impact Delivered</h3>
-                        <div class="metric-grid">
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center;">
-                                <div class="metric-value">3 Wks</div>
+                    <div>
+                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
+                        <div class="metrics-bento">
+                            <div class="metric-cell">
+                                <div class="metric-value" style="font-size: 2rem;">3 Wks</div>
                                 <div class="metric-label">Full platform migration</div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">100<span>%</span></div>
                                 <div class="metric-label">Ops in Asana</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
                             </div>
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center; background: var(--brand-navy); color: white; border: none;">
-                                <div class="metric-value" style="color: white;">Live <i data-lucide="radio" style="color: var(--brand-orange);"></i></div>
-                                <div class="metric-label" style="color: var(--brand-orange-light);">Inventory Dashboards</div>
+                            <div class="metric-cell" style="background: var(--brand-navy);">
+                                <div class="metric-value" style="color: white; font-size: 2rem;">Live <i data-lucide="radio" style="color: var(--brand-orange); width: 24px;"></i></div>
+                                <div class="metric-label" style="color: var(--text-tertiary);">Inventory Dashboards</div>
                             </div>
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center;">
-                                <div class="metric-value">Unified</div>
+                            <div class="metric-cell">
+                                <div class="metric-value" style="font-size: 2rem;">Unified</div>
                                 <div class="metric-label">Centralized execution</div>
                             </div>
                         </div>
@@ -635,19 +672,19 @@
         <!-- SLIDE 7: CASE STUDY - PRIDOLA -->
         <section class="slide" id="slide-7">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">07</span>
-                    <span>Case Study 03</span>
-                    <div class="divider"></div>
+                    <span>Business Case 03</span>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="shopping-cart" style="width: 14px;"></i> E-Commerce • Shopify Plus</div>
+                    <div>
+                        <div class="badge"><i data-lucide="shopping-cart"></i> E-Commerce • Shopify Plus</div>
                         <h2 class="slide-title">Pridola</h2>
                         <p class="slide-subtitle">An e-commerce brand that permanently eliminated weekly status meetings by replacing them with a live Asana operational dashboard.</p>
                         
-                        <div class="quote-box">
+                        <div class="quote-block">
                             <div class="quote-text">
                                 "The dashboard became our single source of truth. We haven't had a status meeting in months, and nothing slipped."
                             </div>
@@ -655,24 +692,24 @@
                         </div>
                     </div>
                     
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 900;">Impact Delivered</h3>
-                        <div class="metric-grid">
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center; background: var(--brand-orange-light); border-color: var(--brand-orange);">
-                                <div class="metric-value">0</div>
-                                <div class="metric-label" style="color: var(--brand-orange);">Status meetings / wk</div>
+                    <div>
+                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
+                        <div class="metrics-bento">
+                            <div class="metric-cell" style="background: var(--brand-orange-light);">
+                                <div class="metric-value" style="color: var(--brand-orange);">0</div>
+                                <div class="metric-label" style="color: var(--text-main);">Status meetings / wk</div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">6<span>+ hr</span></div>
                                 <div class="metric-label">Leadership time saved</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 80%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">42<span>%</span></div>
                                 <div class="metric-label">Delivery improvement</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 42%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">100<span>%</span></div>
                                 <div class="metric-label">Updates automated</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
@@ -686,43 +723,43 @@
         <!-- SLIDE 8: CASE STUDY - BLACK & BLACK -->
         <section class="slide" id="slide-8">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">08</span>
-                    <span>Case Study 04</span>
-                    <div class="divider"></div>
+                    <span>Business Case 04</span>
                 </div>
                 
                 <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="briefcase" style="width: 14px;"></i> Digital Commerce Agency</div>
+                    <div>
+                        <div class="badge"><i data-lucide="briefcase"></i> Digital Commerce Agency</div>
                         <h2 class="slide-title">Black & Black</h2>
                         <p class="slide-subtitle">A digital commerce agency focused on massively improving their internal delivery efficiency and client project outcomes.</p>
                         
-                        <div class="card" style="background: var(--brand-surface); border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--brand-orange); border-radius: 0 12px 12px 0;">
-                            <h4 style="color: var(--brand-orange); text-transform: uppercase; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">The Engagement</h4>
-                            <p style="font-size: 0.95rem; color: var(--brand-navy); line-height: 1.5;">Led dedicated project management and deeply optimized workflows using Asana to streamline delivery and coordination for complex Shopify builds.</p>
+                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
+                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Led dedicated project management and deeply optimized workflows using Asana to streamline delivery and coordination for complex Shopify builds.</p>
                         </div>
                     </div>
                     
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 900;">Impact Delivered</h3>
-                        <div class="metric-grid">
-                            <div class="metric-box">
+                    <div>
+                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
+                        <div class="metrics-bento">
+                            <div class="metric-cell">
                                 <div class="metric-value">40<span>%</span></div>
                                 <div class="metric-label">Manual effort reduction</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 40%;"></div></div>
                             </div>
-                            <div class="metric-box">
+                            <div class="metric-cell">
                                 <div class="metric-value">95<span>%</span></div>
                                 <div class="metric-label">Client satisfaction</div>
                                 <div class="bar-chart"><div class="bar-fill" style="width: 95%;"></div></div>
                             </div>
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center;">
-                                <div class="metric-value"><i data-lucide="zap" style="width: 32px; height: 32px; color: var(--brand-orange);"></i> Faster</div>
+                            <div class="metric-cell">
+                                <div class="metric-value" style="font-size: 2rem;"><i data-lucide="zap" style="width: 24px; color: var(--brand-orange);"></i> Faster</div>
                                 <div class="metric-label">Delivery timelines</div>
                             </div>
-                            <div class="metric-box" style="display: flex; flex-direction: column; justify-content: center;">
-                                <div class="metric-value"><i data-lucide="check-circle-2" style="width: 32px; height: 32px; color: var(--brand-orange);"></i> Optimized</div>
+                            <div class="metric-cell">
+                                <div class="metric-value" style="font-size: 2rem;"><i data-lucide="check-circle-2" style="width: 24px; color: var(--brand-orange);"></i> Optimal</div>
                                 <div class="metric-label">Project workflows</div>
                             </div>
                         </div>
@@ -734,38 +771,38 @@
         <!-- SLIDE 9: DELIVERABLES -->
         <section class="slide" id="slide-9">
             <div class="slide-content desktop-v-center">
-                <div class="header-row reveal">
+                <div class="kicker">
+                    <div class="dot"></div>
                     <span class="page-num">09</span>
-                    <span>The Deliverables</span>
-                    <div class="divider"></div>
+                    <span>ROI & Deliverables</span>
                 </div>
                 
-                <h2 class="slide-title reveal delay-100">What You Can <span>Expect.</span></h2>
-                <p class="slide-subtitle reveal delay-200">Systems specifically designed to improve execution speed and effortlessly scale with growth.</p>
+                <h2 class="slide-title">What You Can <span>Expect.</span></h2>
+                <p class="slide-subtitle">Systems specifically designed to improve execution speed and effortlessly scale with growth.</p>
 
                 <div class="grid-cards grid-cards-5 mt-4">
-                    <div class="card reveal delay-100">
-                        <div class="card-icon"><i data-lucide="layout-template"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="layout-template"></i></div>
                         <h3>Clear Structure</h3>
                         <p>A workspace perfectly aligned with your team, goals, and how work actually moves in your business.</p>
                     </div>
-                    <div class="card reveal delay-200">
-                        <div class="card-icon"><i data-lucide="user-check"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="user-check"></i></div>
                         <h3>Defined Ownership</h3>
                         <p>Every function has a clear owner, deadline, and process—no more chasing updates.</p>
                     </div>
-                    <div class="card reveal delay-300">
-                        <div class="card-icon"><i data-lucide="scaling"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="scaling"></i></div>
                         <h3>Scalable Foundations</h3>
                         <p>Systems that support robust growth without adding operational complexity or new headcount.</p>
                     </div>
-                    <div class="card reveal delay-400">
-                        <div class="card-icon"><i data-lucide="handshake"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="handshake"></i></div>
                         <h3>Built for Adoption</h3>
                         <p>Designed intuitively to actually be used by your team—not just documented and forgotten.</p>
                     </div>
-                    <div class="card reveal delay-500">
-                        <div class="card-icon"><i data-lucide="pie-chart"></i></div>
+                    <div class="bento-card">
+                        <div class="bento-icon"><i data-lucide="pie-chart"></i></div>
                         <h3>Real-Time Visibility</h3>
                         <p>Dashboards and reporting so leadership always knows exactly what's on track and at risk.</p>
                     </div>
@@ -775,33 +812,38 @@
 
         <!-- SLIDE 10: IMPACT & CONNECT -->
         <section class="slide" id="slide-10">
-            <div class="glow-circle" style="width: 800px; height: 800px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5;"></div>
             <div class="slide-content desktop-v-center" style="text-align: center;">
-                <h2 class="slide-title reveal delay-100">Let's build<br><span style="color: var(--brand-orange);">what scales.</span></h2>
-                <p class="slide-subtitle reveal delay-200" style="margin: 0 auto 3rem;">You have the vision. We build the systems that make it real and sustainable. Let's create operational clarity, unlock performance, and scale with confidence.</p>
+                <div class="kicker" style="margin: 0 auto 2.5rem;">
+                    <div class="dot"></div>
+                    <span class="page-num">10</span>
+                    <span>Next Steps</span>
+                </div>
+
+                <h2 class="slide-title">Let's build<br>what <span>scales.</span></h2>
+                <p class="slide-subtitle" style="margin: 0 auto 3rem;">You have the vision. We build the systems that make it real and sustainable. Let's create operational clarity, unlock performance, and scale with confidence.</p>
                 
-                <div class="grid-cards grid-cards-4 reveal delay-300" style="text-align: left; margin-bottom: 3rem; max-width: 1000px; margin-left: auto; margin-right: auto;">
-                    <div class="card" style="align-items: center; text-align: center; border: none; background: transparent; box-shadow: none;">
-                        <div class="card-icon" style="background: var(--brand-surface); border: 2px solid var(--brand-orange);"><i data-lucide="search"></i></div>
-                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 800;">Systems Audit</h4>
+                <div class="metrics-bento" style="text-align: left; margin-bottom: 3rem; max-width: 900px; margin-left: auto; margin-right: auto; grid-template-columns: repeat(4, 1fr);">
+                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 2rem 1rem;">
+                        <i data-lucide="search" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Systems Audit</h4>
                     </div>
-                    <div class="card" style="align-items: center; text-align: center; border: none; background: transparent; box-shadow: none;">
-                        <div class="card-icon" style="background: var(--brand-surface); border: 2px solid var(--brand-orange);"><i data-lucide="pen-tool"></i></div>
-                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 800;">Design & Build</h4>
+                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 2rem 1rem;">
+                        <i data-lucide="pen-tool" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Design & Build</h4>
                     </div>
-                    <div class="card" style="align-items: center; text-align: center; border: none; background: transparent; box-shadow: none;">
-                        <div class="card-icon" style="background: var(--brand-surface); border: 2px solid var(--brand-orange);"><i data-lucide="users"></i></div>
-                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 800;">Team Training</h4>
+                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 2rem 1rem;">
+                        <i data-lucide="users" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Team Training</h4>
                     </div>
-                    <div class="card" style="align-items: center; text-align: center; border: none; background: transparent; box-shadow: none;">
-                        <div class="card-icon" style="background: var(--brand-surface); border: 2px solid var(--brand-orange);"><i data-lucide="refresh-cw"></i></div>
-                        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 800;">Optimization</h4>
+                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 2rem 1rem;">
+                        <i data-lucide="refresh-cw" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Optimization</h4>
                     </div>
                 </div>
 
-                <div class="reveal delay-400">
-                    <a href="mailto:hello@klarityops.com" style="display: inline-flex; align-items: center; gap: 10px; background: var(--brand-navy); color: #fff; text-decoration: none; padding: 1.2rem 2.5rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.95rem; box-shadow: 0 8px 25px rgba(14, 32, 66, 0.3); transition: transform 0.2s, background 0.2s;">
-                        Book a Discovery Call <i data-lucide="arrow-right"></i>
+                <div>
+                    <a href="mailto:hello@klarityops.com" class="btn-primary" style="padding: 16px 32px; font-size: 1rem;">
+                        Book an Executive Audit <i data-lucide="arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -811,16 +853,16 @@
 
     <!-- Presentation Controls -->
     <div class="controls">
-        <button id="prevBtn" title="Previous Slide (Up/Left)"><i data-lucide="chevron-up"></i></button>
-        <span class="slide-counter" id="slideCounter">1 / 10</span>
-        <button id="nextBtn" title="Next Slide (Down/Right)"><i data-lucide="chevron-down"></i></button>
+        <button id="prevBtn" title="Previous Slide (Up/Left)"><i data-lucide="chevron-up" style="width: 20px;"></i></button>
+        <span class="slide-counter" id="slideCounter">01 / 10</span>
+        <button id="nextBtn" title="Next Slide (Down/Right)"><i data-lucide="chevron-down" style="width: 20px;"></i></button>
     </div>
 
     <script>
         // Init Lucide Icons
         lucide.createIcons();
 
-        // Scroll, Animation & Presentation Logic
+        // Scroll & Presentation Logic
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('presentationContainer');
             const slides = document.querySelectorAll('.slide');
@@ -832,31 +874,8 @@
             const totalSlides = slides.length;
             let currentSlideIndex = 0;
 
-            // Intersection Observer for Animations
-            const observerOptions = {
-                root: container,
-                rootMargin: '0px',
-                threshold: 0.3 // Trigger when 30% of slide is visible
-            };
-
-            const slideObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        // Trigger inner bar-chart animations
-                        const bars = entry.target.querySelectorAll('.bar-fill');
-                        bars.forEach(bar => {
-                            if(bar.dataset.target) {
-                                setTimeout(() => {
-                                    bar.style.width = bar.dataset.target;
-                                }, 500); // slight delay after slide activates
-                            }
-                        });
-                    }
-                });
-            }, observerOptions);
-
-            slides.forEach(slide => slideObserver.observe(slide));
+            // Format number with leading zero
+            const formatSlideNum = (num) => num < 10 ? `0${num}` : num;
 
             // Update UI based on scroll position
             function updateUI() {
@@ -871,7 +890,7 @@
                 if(currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
 
                 // Update Counter
-                counter.textContent = `${currentSlideIndex + 1} / ${totalSlides}`;
+                counter.textContent = `${formatSlideNum(currentSlideIndex + 1)} / ${formatSlideNum(totalSlides)}`;
                 
                 // Update Buttons
                 prevBtn.disabled = currentSlideIndex === 0;
@@ -921,11 +940,11 @@
             // Adjust icons on resize if mobile (horizontal vs vertical scroll mentality)
             window.addEventListener('resize', () => {
                if(window.innerWidth < 1024) {
-                   prevBtn.innerHTML = '<i data-lucide="chevron-up"></i>';
-                   nextBtn.innerHTML = '<i data-lucide="chevron-down"></i>';
+                   prevBtn.innerHTML = '<i data-lucide="chevron-up" style="width: 20px;"></i>';
+                   nextBtn.innerHTML = '<i data-lucide="chevron-down" style="width: 20px;"></i>';
                } else {
-                   prevBtn.innerHTML = '<i data-lucide="chevron-left"></i>';
-                   nextBtn.innerHTML = '<i data-lucide="chevron-right"></i>';
+                   prevBtn.innerHTML = '<i data-lucide="chevron-left" style="width: 20px;"></i>';
+                   nextBtn.innerHTML = '<i data-lucide="chevron-right" style="width: 20px;"></i>';
                }
                lucide.createIcons();
             });
