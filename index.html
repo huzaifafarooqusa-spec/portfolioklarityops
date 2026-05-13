@@ -797,7 +797,7 @@
         });
 
         // Webhook / Google Sheets Form Submission Logic
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxD1uWf89A44zFaGfs1tRw40_tiYS-LMuhcUY-sOwGg5mUQI-d26TTJ8EsRDPjlvFnc/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxY4ORgh7shT8ep4ldOoSMKj6NDo4ZhH5Uyc-5UZJ3g92wCLjUnECsQYF1fQXEbuBRk/exec';
         const form = document.forms['submit-to-google-sheet'];
 
         form.addEventListener('submit', e => {
@@ -831,7 +831,6 @@
                     
                     // Note: If you get here, it might just be CORS blocking the read response, 
                     // but the data might have actually submitted successfully to the sheet. 
-                    // Showing the error message just in case it truly failed.
                     errorMsg.style.display = 'block';
                     successMsg.style.display = 'none';
                 })
