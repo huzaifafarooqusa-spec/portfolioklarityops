@@ -711,7 +711,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Biggest Operational Bottleneck</label>
-                    <textarea name="Bottleneck" class="form-textarea" placeholder="Tell us briefly what is breaking as you scale..." required></textarea>
+                    <textarea name="Message" class="form-textarea" placeholder="Tell us briefly what is breaking as you scale..." required></textarea>
                 </div>
 
                 <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 0.5rem;">
@@ -828,6 +828,10 @@
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
+                    
+                    // Note: If you get here, it might just be CORS blocking the read response, 
+                    // but the data might have actually submitted successfully to the sheet. 
+                    // Showing the error message just in case it truly failed.
                     errorMsg.style.display = 'block';
                     successMsg.style.display = 'none';
                 })
