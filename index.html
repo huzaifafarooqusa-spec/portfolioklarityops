@@ -685,22 +685,23 @@
             <form id="submit-to-google-sheet" name="submit-to-google-sheet">
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
-                    <input type="text" name="Name" class="form-input" placeholder="Jane Doe" required>
+                    <!-- LOWERCASE name attributes match standard scripts -->
+                    <input type="text" name="name" class="form-input" placeholder="Jane Doe" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Work Email</label>
-                    <input type="email" name="Email" class="form-input" placeholder="jane@yourbrand.com" required>
+                    <input type="email" name="email" class="form-input" placeholder="jane@yourbrand.com" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Company Website</label>
-                    <input type="text" name="Website" class="form-input" placeholder="yourbrand.com" required>
+                    <input type="text" name="website" class="form-input" placeholder="yourbrand.com" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Monthly Revenue</label>
-                    <select name="Revenue" class="form-select" required>
+                    <select name="revenue" class="form-select" required>
                         <option value="" disabled selected>Select revenue range</option>
                         <option value="Under $100k">&lt; $100k / month</option>
                         <option value="$100k - $500k">$100k - $500k / month</option>
@@ -711,7 +712,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Biggest Operational Bottleneck</label>
-                    <textarea name="Message" class="form-textarea" placeholder="Tell us briefly what is breaking as you scale..." required></textarea>
+                    <textarea name="message" class="form-textarea" placeholder="Tell us briefly what is breaking as you scale..." required></textarea>
                 </div>
 
                 <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 0.5rem;">
@@ -812,10 +813,11 @@
             btn.innerHTML = 'Sending... <i data-lucide="loader" class="animate-spin" style="width: 16px;"></i>';
             lucide.createIcons();
 
+            // STANDARD FETCH METHOD: Send FormData directly without 'no-cors' mode 
+            // so the payload is not stripped out by the browser.
             fetch(scriptURL, { 
                 method: 'POST', 
-                body: new FormData(form),
-                mode: 'no-cors' // Critical to avoid CORS issues with Google Scripts
+                body: new FormData(form)
             })
                 .then(response => {
                     successMsg.style.display = 'block';
@@ -828,9 +830,6 @@
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    
-                    // Note: If you get here, it might just be CORS blocking the read response, 
-                    // but the data might have actually submitted successfully to the sheet. 
                     errorMsg.style.display = 'block';
                     successMsg.style.display = 'none';
                 })
