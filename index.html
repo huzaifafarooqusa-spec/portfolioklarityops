@@ -16,16 +16,15 @@
     <style>
         /* CSS Reset & Enterprise Variables */
         :root {
-            /* Executive Color Palette */
-            --brand-orange: #E85D04; /* Sharper, deeper orange */
+            --brand-orange: #E85D04;
             --brand-orange-light: rgba(232, 93, 4, 0.08);
             --brand-orange-hover: #D05303;
             
-            --brand-navy: #0A192F; /* Deep authoritative navy */
-            --brand-ink: #111827; /* Slate black for main text */
+            --brand-navy: #0A192F;
+            --brand-ink: #111827;
             
-            --bg-main: #F8F9FA; /* Crisp, cool off-white */
-            --bg-surface: #FFFFFF; /* Pure white for cards */
+            --bg-main: #F8F9FA;
+            --bg-surface: #FFFFFF;
             
             --text-main: #111827;
             --text-secondary: #4B5563;
@@ -34,24 +33,17 @@
             --border-light: #E5E7EB;
             --border-dark: #D1D5DB;
             
-            /* Premium Easing */
-            --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
-            
-            /* Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
 
-        body, html {
-            width: 100%;
-            height: 100%;
+        body {
             background-color: var(--bg-main);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
@@ -60,956 +52,707 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        body.modal-open { overflow: hidden; }
+
         h1, h2, h3, h4, h5, h6, .font-display {
             font-family: 'Hanken Grotesk', sans-serif;
             color: var(--brand-navy);
         }
 
-        /* Responsive Presentation Container */
-        .presentation-container {
-            width: 100%;
-            height: 100svh; /* svh handles mobile browser UI better */
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            /* scroll-snap removed from base for mobile natural scrolling */
+        /* Navbar */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(248, 249, 250, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light); z-index: 1000;
+            padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-family: 'Hanken Grotesk', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--brand-ink); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--brand-orange); }
+        .nav-cta { display: none; cursor: pointer; }
+
+        @media (min-width: 768px) {
+            .navbar { padding: 1rem 3rem; }
+            .nav-cta {
+                display: inline-flex; align-items: center; gap: 8px;
+                background: var(--brand-ink); color: white; border: none;
+                padding: 10px 20px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;
+                transition: background 0.2s;
+            }
+            .nav-cta:hover { background: var(--brand-navy); }
         }
 
-        /* Slide Core - Technical Dot Grid */
-        .slide {
-            width: 100%;
-            min-height: 100svh;
-            padding: 60px 20px 120px; /* Generous bottom padding for controls */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            background-image: radial-gradient(var(--border-light) 1px, transparent 1px);
-            background-size: 24px 24px;
-            overflow: hidden;
+        /* Section Layout */
+        .section { padding: 5rem 1.5rem; position: relative; }
+        .section-alt {
+            background-image: radial-gradient(var(--border-dark) 1px, transparent 1px);
+            background-size: 24px 24px; background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);
         }
+        @media (min-width: 1024px) { .section { padding: 8rem 3rem; } }
+        .container { width: 100%; max-width: 1100px; margin: 0 auto; }
+        .hero { padding-top: 8rem; }
 
-        /* Subtle precise line elements instead of glowing orbs */
-        .slide::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 20px; width: 1px; height: 100%;
-            background: var(--border-light);
-            z-index: 0;
-        }
-
-        /* Slide Content Wrapper */
-        .slide-content {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Kicker / Header Row */
+        /* Typography */
         .kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 6px 12px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
+            display: inline-flex; align-items: center; gap: 12px; padding: 6px 12px;
+            background: var(--bg-surface); border: 1px solid var(--border-dark); border-radius: 4px;
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-secondary); margin-bottom: 2rem; box-shadow: var(--shadow-sm);
         }
         .kicker .page-num { color: var(--brand-orange); font-weight: 900; }
         .kicker .dot { width: 4px; height: 4px; background: var(--brand-orange); border-radius: 50%; }
 
-        /* Typography */
-        .slide-title {
-            font-size: clamp(2.2rem, 8vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.25rem;
-            color: var(--brand-ink);
+        .section-title {
+            font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.03em; margin-bottom: 1.25rem; color: var(--brand-ink);
+        }
+        .section-title span { color: var(--brand-orange); }
+        .section-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-secondary);
+            line-height: 1.6; margin-bottom: 2.5rem; max-width: 700px;
         }
 
-        .slide-title span { color: var(--brand-orange); }
+        /* Grids */
+        .grid-1-2 { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        @media (min-width: 1024px) { .grid-1-2 { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; } }
 
-        .slide-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
-            max-width: 700px;
-            font-weight: 400;
-        }
-
-        /* Layout Grids */
-        .grid-1-2 { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
         .grid-cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 768px) { .grid-cards { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .grid-cards-3 { grid-template-columns: repeat(3, 1fr); } .grid-cards-5 { grid-template-columns: repeat(3, 1fr); } }
 
-        @media (min-width: 768px) {
-            .grid-1-2 { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-            .grid-cards { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        }
-
-        @media (min-width: 1024px) {
-            /* Enable strict snapping ONLY on desktop */
-            .presentation-container { scroll-snap-type: y mandatory; }
-            .slide { 
-                padding: 60px 40px; 
-                height: 100vh; 
-                scroll-snap-align: start; 
-            }
-            .grid-cards-4 { grid-template-columns: repeat(4, 1fr); }
-            .grid-cards-5 { grid-template-columns: repeat(5, 1fr); }
-            .desktop-v-center { display: flex; flex-direction: column; justify-content: center; height: 100%; }
-            .slide::after { left: 40px; }
-        }
-
-        /* Bento Box / Enterprise Cards */
+        /* Bento Cards */
         .bento-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: all 0.4s var(--ease-spring);
+            background: var(--bg-surface); border: 1px solid var(--border-light);
+            border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-sm);
+            display: flex; flex-direction: column; transition: all 0.3s var(--ease-spring);
         }
-
-        @media (min-width: 1024px) {
-            .bento-card { padding: 2rem; }
-        }
-
-        .bento-card:hover {
-            border-color: var(--border-dark);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
+        .bento-card:hover { border-color: var(--border-dark); box-shadow: var(--shadow-md); transform: translateY(-2px); }
         .bento-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            background: var(--brand-orange-light);
-            color: var(--brand-orange);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.25rem;
-            border: 1px solid rgba(232, 93, 4, 0.15);
+            width: 48px; height: 48px; border-radius: 8px;
+            background: var(--brand-orange-light); color: var(--brand-orange);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.25rem; border: 1px solid rgba(232, 93, 4, 0.15);
         }
-
-        .bento-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; color: var(--brand-ink); letter-spacing: -0.01em; }
+        .bento-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; color: var(--brand-ink); }
         .bento-card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
 
-        /* Structured Metrics Grid (Bento Style) */
+        /* Metrics */
         .metrics-bento {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1px;
-            background: var(--border-light); /* Acts as 1px borders */
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
+            display: grid; grid-template-columns: 1fr; gap: 1px;
+            background: var(--border-light); border: 1px solid var(--border-light);
+            border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm);
         }
+        @media (min-width: 600px) { .metrics-bento { grid-template-columns: 1fr 1fr; } }
         
-        @media (min-width: 600px) {
-            .metrics-bento { grid-template-columns: 1fr 1fr; }
-        }
-
-        .metric-cell {
-            background: var(--bg-surface);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        @media (min-width: 1024px) {
-            .metric-cell { padding: 2rem; }
-        }
-
-        .metric-value { 
-            font-size: clamp(1.8rem, 6vw, 2.75rem); 
-            font-weight: 800; 
-            color: var(--brand-ink); 
-            font-family: 'Hanken Grotesk'; 
-            line-height: 1; 
-            margin-bottom: 0.75rem; 
-            display: flex; 
-            align-items: baseline; 
-            gap: 4px;
-            letter-spacing: -0.03em;
-        }
-        .metric-value span { color: var(--brand-orange); font-size: clamp(1.2rem, 4vw, 1.5rem); font-weight: 700;}
+        .metric-cell { background: var(--bg-surface); padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; }
+        .metric-value { font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; color: var(--brand-ink); font-family: 'Hanken Grotesk'; line-height: 1; margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 4px; }
+        .metric-value span { color: var(--brand-orange); font-size: 1.25rem; font-weight: 700;}
         .metric-label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; }
-        
-        /* Razor-thin Progress Bar (Static Version) */
+
         .bar-chart { margin-top: 1rem; width: 100%; height: 4px; background: var(--bg-main); border-radius: 2px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--brand-orange); border-radius: 2px; }
+        .bar-fill { height: 100%; background: var(--brand-orange); border-radius: 2px; width: 0; transition: width 1.5s var(--ease-spring); }
 
-        /* Last Section Specific Grids */
-        .step-grid { grid-template-columns: 1fr; }
-        @media (min-width: 600px) { .step-grid { grid-template-columns: 1fr 1fr; } }
-        @media (min-width: 1024px) { .step-grid { grid-template-columns: repeat(4, 1fr); } }
-
-        /* Executive Quote */
-        .quote-block {
-            border-left: 3px solid var(--brand-orange);
-            padding: 0 0 0 1.25rem;
-            margin-top: 2rem;
-        }
-        .quote-text { font-size: clamp(1.1rem, 3vw, 1.25rem); font-style: italic; color: var(--brand-ink); line-height: 1.5; margin-bottom: 1rem; font-weight: 500;}
-        .quote-author { font-size: 0.85rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-dark);
-            color: var(--brand-ink);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-        .badge i { color: var(--brand-orange); width: 14px; height: 14px;}
-
-        /* Precise Timeline */
-        .timeline { display: flex; flex-direction: column; gap: 1rem; position: relative; }
-        @media(min-width: 1024px) {
-            .timeline { flex-direction: row; gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; margin-top: 2rem;}
-        }
-        .timeline-step { 
-            background: var(--bg-surface); 
-            padding: 1.5rem; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-        }
-        @media(min-width: 1024px) {
-            .timeline-step { flex: 1; border: none; border-radius: 0; padding: 2rem; }
-        }
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: 1rem; }
+        @media(min-width: 1024px) { .timeline { flex-direction: row; gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; } }
+        .timeline-step { background: var(--bg-surface); padding: 1.5rem; border: 1px solid var(--border-light); border-radius: 12px; }
+        @media(min-width: 1024px) { .timeline-step { flex: 1; border: none; border-radius: 0; padding: 2rem; } }
         .step-num { font-family: 'Hanken Grotesk'; font-size: 0.85rem; font-weight: 800; color: var(--brand-orange); margin-bottom: 0.75rem; letter-spacing: 0.1em; }
         .timeline-step h3 { font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700; color: var(--brand-ink); }
         .timeline-step p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
 
-        /* Architectural Stack */
+        /* Architecture Stack */
         .arch-stack { display: flex; flex-direction: column; gap: 1rem; }
-        .arch-layer { 
-            background: var(--bg-surface); 
-            border: 1px solid var(--border-light); 
-            padding: 1.25rem 1.5rem; 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            gap: 1.25rem; 
-            box-shadow: var(--shadow-sm); 
-            transition: transform 0.4s var(--ease-spring), border-color 0.4s;
-        }
-        .arch-layer:hover { transform: translateX(8px); border-color: var(--brand-orange); }
+        .arch-layer { background: var(--bg-surface); border: 1px solid var(--border-light); padding: 1.25rem; border-radius: 8px; display: flex; align-items: center; gap: 1rem; box-shadow: var(--shadow-sm); transition: transform 0.3s ease; }
+        .arch-layer:hover { transform: translateX(5px); border-color: var(--border-dark); }
         .arch-icon { color: var(--brand-orange); width: 24px; height: 24px; flex-shrink: 0; }
-        
-        /* Navigation Controls - Minimalist */
-        .controls {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 8px;
-            border-radius: 100px;
-            border: 1px solid var(--border-dark);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-        }
 
-        @media (min-width: 768px) {
-            .controls { bottom: 30px; }
-        }
-
-        .controls button {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-
-        .controls button:hover:not(:disabled) { background: var(--border-light); color: var(--brand-ink); }
-        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
-        .slide-counter { font-size: 0.85rem; font-weight: 600; color: var(--brand-ink); padding: 0 12px; font-variant-numeric: tabular-nums; }
-
-        /* Progress Bar Top */
-        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: var(--border-light); z-index: 1001; }
-        .progress-bar { height: 100%; background: var(--brand-orange); width: 0%; transition: width 0.1s linear; }
-
-        /* Primary Button */
+        /* Buttons */
         .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--brand-ink);
-            color: white;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 4px; /* Sharp corners for executive feel */
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s var(--ease-spring);
-            border: 1px solid var(--brand-ink);
+            display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+            background: var(--brand-ink); color: white; text-decoration: none;
+            padding: 16px 32px; border-radius: 4px; font-weight: 600; font-size: 1rem;
+            border: 1px solid var(--brand-ink); transition: background 0.2s, transform 0.2s;
+            justify-content: center; font-family: inherit;
         }
-        .btn-primary:hover {
-            background: var(--bg-surface);
-            color: var(--brand-ink);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+        .btn-primary:hover { background: var(--brand-navy); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
+            background: var(--bg-surface); border: 1px solid var(--border-dark);
+            color: var(--brand-ink); border-radius: 4px; font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 1.5rem; box-shadow: var(--shadow-sm);
         }
+        .badge i { color: var(--brand-orange); width: 14px; height: 14px;}
 
-        /* --- Scroll Animations --- */
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s var(--ease-spring); }
-        .reveal-left { opacity: 0; transform: translateX(-20px); transition: all 0.8s var(--ease-spring); }
-        .reveal-right { opacity: 0; transform: translateX(20px); transition: all 0.8s var(--ease-spring); }
-        
-        .active .reveal { opacity: 1; transform: translateY(0); }
-        .active .reveal-left { opacity: 1; transform: translateX(0); }
-        .active .reveal-right { opacity: 1; transform: translateX(0); }
-        
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
+        /* Modal / Popup Form */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(8px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: all 0.3s ease;
+            padding: 1rem;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--bg-surface); width: 100%; max-width: 500px;
+            border-radius: 12px; padding: 2.5rem; position: relative;
+            transform: translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border-light);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .close-modal {
+            position: absolute; top: 1.25rem; right: 1.25rem;
+            background: var(--bg-main); border: 1px solid var(--border-light); color: var(--text-secondary);
+            cursor: pointer; transition: all 0.2s; width: 36px; height: 36px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .close-modal:hover { color: var(--brand-ink); border-color: var(--border-dark); background: var(--bg-surface); }
 
+        /* Form Styles */
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .form-input, .form-select, .form-textarea { 
+            width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-dark); 
+            border-radius: 4px; background: var(--bg-main); color: var(--text-main); 
+            font-family: inherit; font-size: 1rem; transition: all 0.2s ease; 
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--brand-orange); box-shadow: 0 0 0 3px var(--brand-orange-light); background: var(--bg-surface); }
+        .form-textarea { resize: vertical; min-height: 100px; }
+
+        /* Scroll Animations (Desktop Only) */
+        @media (min-width: 1024px) {
+            .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s var(--ease-spring); }
+            .reveal-left { opacity: 0; transform: translateX(-20px); transition: all 0.8s var(--ease-spring); }
+            .reveal-right { opacity: 0; transform: translateX(20px); transition: all 0.8s var(--ease-spring); }
+            .active .reveal { opacity: 1; transform: translateY(0); }
+            .active .reveal-left { opacity: 1; transform: translateX(0); }
+            .active .reveal-right { opacity: 1; transform: translateX(0); }
+            .delay-100 { transition-delay: 100ms; }
+            .delay-200 { transition-delay: 200ms; }
+            .delay-300 { transition-delay: 300ms; }
+            .delay-400 { transition-delay: 400ms; }
+        }
+        @media (max-width: 1023px) {
+            .reveal, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">Klarity<span>Ops</span>.</a>
+        <button onclick="openModal(event)" class="nav-cta">Book Audit <i data-lucide="arrow-right"></i></button>
+    </nav>
 
-    <div class="presentation-container" id="presentationContainer">
-
-        <!-- SLIDE 1: COVER -->
-        <section class="slide" id="slide-1">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
+    <!-- SECTION 1: HERO -->
+    <section class="section section-alt hero">
+        <div class="container grid-1-2">
+            <div class="reveal-left delay-100">
+                <div class="kicker">
                     <div class="dot"></div>
-                    <span class="page-num">01</span>
                     <span>Executive Summary</span>
                 </div>
-                
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <h1 class="slide-title">Scale with <span>systems.</span><br>Not operational chaos.</h1>
-                        <p class="slide-subtitle">We design operational infrastructure for scaling DTC and eCommerce brands. Replace fragmented execution with structured Asana-powered systems, automation layers, and executive visibility frameworks.</p>
-                        <a href="https://klarityops.com" target="_blank" rel="noopener noreferrer" class="btn-primary">
-                            Initiate Engagement <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
-                        </a>
+                <h1 class="section-title">Scale with <span>systems.</span><br>Not operational chaos.</h1>
+                <p class="section-subtitle">We design operational infrastructure for scaling DTC and eCommerce brands. Replace fragmented execution with structured Asana-powered systems, automation layers, and executive visibility frameworks.</p>
+                <button onclick="openModal(event)" class="btn-primary">
+                    Initiate Engagement <i data-lucide="arrow-right" style="width: 18px;"></i>
+                </button>
+            </div>
+            
+            <div class="reveal-right delay-200">
+                <div class="metrics-bento">
+                    <div class="metric-cell">
+                        <div class="metric-value">42<span>%</span></div>
+                        <div class="metric-label">On-time delivery inc.</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="42%"></div></div>
                     </div>
-                    
-                    <div class="reveal-right delay-200">
-                        <div class="metrics-bento">
-                            <div class="metric-cell">
-                                <div class="metric-value">42<span>%</span></div>
-                                <div class="metric-label">On-time delivery inc.</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 42%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">90<span>%</span></div>
-                                <div class="metric-label">Error reduction</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 90%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">50<span>%</span></div>
-                                <div class="metric-label">Work automated</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 50%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">6<span>+ hr</span></div>
-                                <div class="metric-label">Saved weekly (Exec)</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 80%;"></div></div>
-                            </div>
-                        </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">90<span>%</span></div>
+                        <div class="metric-label">Error reduction</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="90%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">50<span>%</span></div>
+                        <div class="metric-label">Work automated</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="50%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">6<span>+ hr</span></div>
+                        <div class="metric-label">Saved weekly (Exec)</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="80%"></div></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 2: WHO WE ARE -->
-        <section class="slide" id="slide-2">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
+    <!-- SECTION 2: PHILOSOPHY -->
+    <section class="section">
+        <div class="container">
+            <div class="reveal delay-100">
+                <div class="kicker">
                     <div class="dot"></div>
-                    <span class="page-num">02</span>
                     <span>Core Philosophy</span>
                 </div>
-                
-                <h2 class="slide-title reveal delay-100">Operational clarity <span>at scale.</span></h2>
-                <p class="slide-subtitle reveal delay-200">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
+                <h2 class="section-title">Operational clarity <span>at scale.</span></h2>
+                <p class="section-subtitle">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
+            </div>
 
-                <div class="grid-cards grid-cards-5 mt-4">
-                    <div class="bento-card reveal delay-100">
-                        <div class="bento-icon"><i data-lucide="crosshair"></i></div>
-                        <h3>Focus</h3>
-                        <p>Eliminate chaos and bring focus back to strategies that actually move the needle.</p>
-                    </div>
-                    <div class="bento-card reveal delay-200">
-                        <div class="bento-icon"><i data-lucide="layers"></i></div>
-                        <h3>Structure</h3>
-                        <p>Design scalable systems that strictly align your people, processes, and priorities.</p>
-                    </div>
-                    <div class="bento-card reveal delay-300">
-                        <div class="bento-icon"><i data-lucide="eye"></i></div>
-                        <h3>Visibility</h3>
-                        <p>Get real-time clarity across projects, team performance, and operational roadblocks.</p>
-                    </div>
-                    <div class="bento-card reveal delay-400">
-                        <div class="bento-icon"><i data-lucide="trending-up"></i></div>
-                        <h3>Scale</h3>
-                        <p>Build the foundational operational infrastructure to scale without adding complexity.</p>
-                    </div>
-                    <div class="bento-card reveal delay-500">
-                        <div class="bento-icon"><i data-lucide="link"></i></div>
-                        <h3>Alignment</h3>
-                        <p>Create strict accountability and defined ownership across your entire cross-functional team.</p>
-                    </div>
+            <div class="grid-cards grid-cards-3">
+                <div class="bento-card reveal delay-100">
+                    <div class="bento-icon"><i data-lucide="crosshair"></i></div>
+                    <h3>Focus</h3>
+                    <p>Eliminate chaos and bring focus back to strategies that actually move the needle.</p>
+                </div>
+                <div class="bento-card reveal delay-200">
+                    <div class="bento-icon"><i data-lucide="layers"></i></div>
+                    <h3>Structure</h3>
+                    <p>Design scalable systems that strictly align your people, processes, and priorities.</p>
+                </div>
+                <div class="bento-card reveal delay-300">
+                    <div class="bento-icon"><i data-lucide="eye"></i></div>
+                    <h3>Visibility</h3>
+                    <p>Get real-time clarity across projects, team performance, and operational roadblocks.</p>
+                </div>
+                <div class="bento-card reveal delay-400">
+                    <div class="bento-icon"><i data-lucide="trending-up"></i></div>
+                    <h3>Scale</h3>
+                    <p>Build the foundational operational infrastructure to scale without adding complexity.</p>
+                </div>
+                <div class="bento-card reveal delay-500">
+                    <div class="bento-icon"><i data-lucide="link"></i></div>
+                    <h3>Alignment</h3>
+                    <p>Create strict accountability and defined ownership across your entire cross-functional team.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 3: ARCHITECTURE -->
-        <section class="slide" id="slide-3">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
+    <!-- SECTION 3: ARCHITECTURE -->
+    <section class="section section-alt">
+        <div class="container grid-1-2">
+            <div class="reveal-left delay-100">
+                <div class="kicker">
                     <div class="dot"></div>
-                    <span class="page-num">03</span>
                     <span>Operational Architecture</span>
                 </div>
-                
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <h2 class="slide-title">Architecture<br><span>layers.</span></h2>
-                        <p class="slide-subtitle">We build for founder autonomy—helping leadership extract themselves from daily operations through structured, reliable workspace architecture.</p>
-                        
-                        <div class="quote-block">
-                            <div class="quote-text">
-                                "KlarityOps designs infrastructure layers that bring clarity, automation, accountability, and scalability into growing organizations."
-                            </div>
-                        </div>
+                <h2 class="section-title">Architecture<br><span>layers.</span></h2>
+                <p class="section-subtitle">We build for founder autonomy—helping leadership extract themselves from daily operations through structured, reliable workspace architecture.</p>
+            </div>
+            
+            <div class="arch-stack">
+                <div class="arch-layer reveal-right delay-100">
+                    <i data-lucide="layout-dashboard" class="arch-icon"></i>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">System Design</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Custom Asana workspaces built around org structure.</p>
                     </div>
-                    
-                    <div class="arch-stack">
-                        <div class="arch-layer reveal-right delay-100">
-                            <i data-lucide="layout-dashboard" class="arch-icon"></i>
-                            <div>
-                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">System Design</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Custom Asana workspaces built around org structure.</p>
-                            </div>
-                        </div>
-                        <div class="arch-layer reveal-right delay-200">
-                            <i data-lucide="git-merge" class="arch-icon"></i>
-                            <div>
-                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Process Setup</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Workflows and automations that eliminate busywork.</p>
-                            </div>
-                        </div>
-                        <div class="arch-layer reveal-right delay-300">
-                            <i data-lucide="monitor-play" class="arch-icon"></i>
-                            <div>
-                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Visibility Layer</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Dashboards giving leadership live execution insight.</p>
-                            </div>
-                        </div>
-                        <div class="arch-layer reveal-right delay-400">
-                            <i data-lucide="maximize" class="arch-icon"></i>
-                            <div>
-                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Scalability</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Systems designed to grow without adding headcount.</p>
-                            </div>
-                        </div>
-                        <div class="arch-layer reveal-right delay-500">
-                            <i data-lucide="book-open" class="arch-icon"></i>
-                            <div>
-                                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink);">Team Enablement</h3>
-                                <p style="font-size: 0.9rem; color: var(--text-secondary);">SOPs and documentation for independent execution.</p>
-                            </div>
-                        </div>
+                </div>
+                <div class="arch-layer reveal-right delay-200">
+                    <i data-lucide="git-merge" class="arch-icon"></i>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Process Setup</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Workflows and automations that eliminate busywork.</p>
+                    </div>
+                </div>
+                <div class="arch-layer reveal-right delay-300">
+                    <i data-lucide="monitor-play" class="arch-icon"></i>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Visibility Layer</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Dashboards giving leadership live execution insight.</p>
+                    </div>
+                </div>
+                <div class="arch-layer reveal-right delay-400">
+                    <i data-lucide="maximize" class="arch-icon"></i>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Scalability</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Systems designed to grow without adding headcount.</p>
+                    </div>
+                </div>
+                <div class="arch-layer reveal-right delay-500">
+                    <i data-lucide="book-open" class="arch-icon"></i>
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Team Enablement</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">SOPs and documentation for independent execution.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 4: METHODOLOGY -->
-        <section class="slide" id="slide-4">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
+    <!-- SECTION 4: METHODOLOGY -->
+    <section class="section">
+        <div class="container">
+            <div class="reveal delay-100">
+                <div class="kicker">
                     <div class="dot"></div>
-                    <span class="page-num">04</span>
                     <span>Implementation</span>
                 </div>
-                
-                <h2 class="slide-title reveal delay-100">Built for <span>execution.</span></h2>
-                <p class="slide-subtitle reveal delay-200">Our approach is structured for speed, operational adoption, and long-term scalability—from the first discovery call to full team launch.</p>
+                <h2 class="section-title">Built for <span>execution.</span></h2>
+                <p class="section-subtitle">Our approach is structured for speed, operational adoption, and long-term scalability—from the first discovery call to full team launch.</p>
+            </div>
 
-                <div class="timeline reveal delay-300">
-                    <div class="timeline-step">
-                        <div class="step-num">PHASE 01</div>
-                        <h3>Discovery</h3>
-                        <p>Deep dive into your teams, workflows, goals, and operational pain points.</p>
+            <div class="timeline reveal delay-200">
+                <div class="timeline-step">
+                    <div class="step-num">PHASE 01</div>
+                    <h3>Discovery</h3>
+                    <p>Deep dive into teams, workflows, goals, and pain points.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">PHASE 02</div>
+                    <h3>Standardization</h3>
+                    <p>Processes with templates, custom automations, and integrations.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">PHASE 03</div>
+                    <h3>Implementation</h3>
+                    <p>Building tailored Asana architecture collaboratively.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">PHASE 04</div>
+                    <h3>Team Training</h3>
+                    <p>Interactive, hands-on team enablement sessions.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">PHASE 05</div>
+                    <h3>Metrics</h3>
+                    <p>Executive dashboards and automated reporting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASE STUDIES SECTION HEADER -->
+    <section class="section section-alt pb-0" style="border-bottom: none; padding-bottom: 0;">
+        <div class="container text-center reveal delay-100">
+            <h2 class="section-title" style="margin-bottom: 0;">Proven <span>Business Cases.</span></h2>
+        </div>
+    </section>
+
+    <!-- CASE STUDY 1: SOLAWAVE -->
+    <section class="section section-alt pt-10" style="border-top: none;">
+        <div class="container grid-1-2">
+            <div class="reveal-left delay-100">
+                <div class="badge"><i data-lucide="shopping-bag"></i> DTC Skincare</div>
+                <h2 class="section-title" style="font-size: 3rem;">Solawave</h2>
+                <p class="section-subtitle">A scaling skincare brand seeking operational consistency across cross-functional teams with zero executive visibility.</p>
+                
+                <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                    <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
+                    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Built a company-wide Asana operating system, implemented OKR structures, and standardized delivery workflows across marketing, product, and operations.</p>
+                </div>
+            </div>
+            <div class="reveal-right delay-200">
+                <div class="metrics-bento">
+                    <div class="metric-cell">
+                        <div class="metric-value">90<span>%</span></div>
+                        <div class="metric-label">Errors reduced</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="90%"></div></div>
                     </div>
-                    <div class="timeline-step">
-                        <div class="step-num">PHASE 02</div>
-                        <h3>Standardization</h3>
-                        <p>Standardizing processes with templates, custom automations, and integrations.</p>
+                    <div class="metric-cell">
+                        <div class="metric-value">25<span>%</span></div>
+                        <div class="metric-label">Speed improved</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="25%"></div></div>
                     </div>
-                    <div class="timeline-step">
-                        <div class="step-num">PHASE 03</div>
-                        <h3>Implementation</h3>
-                        <p>Building and refining tailored Asana architecture collaboratively with stakeholders.</p>
+                    <div class="metric-cell">
+                        <div class="metric-value">50<span>%</span></div>
+                        <div class="metric-label">Work automated</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="50%"></div></div>
                     </div>
-                    <div class="timeline-step">
-                        <div class="step-num">PHASE 04</div>
-                        <h3>Team Training</h3>
-                        <p>Onboarding your entire team through interactive, hands-on enablement sessions.</p>
-                    </div>
-                    <div class="timeline-step">
-                        <div class="step-num">PHASE 05</div>
-                        <h3>Metrics</h3>
-                        <p>Implementing executive dashboards and automated reporting for ongoing visibility.</p>
+                    <div class="metric-cell">
+                        <div class="metric-value">100<span>%</span></div>
+                        <div class="metric-label">Exec visibility</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="100%"></div></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 5: CASE STUDY - SOLAWAVE -->
-        <section class="slide" id="slide-5">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
-                    <div class="dot"></div>
-                    <span class="page-num">05</span>
-                    <span>Business Case 01</span>
-                </div>
+    <!-- CASE STUDY 2: ROOSTY'S -->
+    <section class="section">
+        <div class="container grid-1-2">
+            <div style="order: 2;" class="reveal-right delay-100">
+                <div class="badge"><i data-lucide="activity"></i> Supplements • $10M+ Revenue</div>
+                <h2 class="section-title" style="font-size: 3rem;">Roosty's</h2>
+                <p class="section-subtitle">A $10M+ chicken supplement brand scaling supply chain operations and consolidating its entire tech stack into a single Asana OS.</p>
                 
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="shopping-bag"></i> DTC Skincare E-Commerce</div>
-                        <h2 class="slide-title">Solawave</h2>
-                        <p class="slide-subtitle">A scaling skincare brand seeking operational consistency across cross-functional teams with zero executive visibility.</p>
-                        
-                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
-                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Built a company-wide Asana operating system, implemented OKR structures, and standardized delivery workflows across marketing, product, and operations.</p>
-                        </div>
+                <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                    <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Challenge</h4>
+                    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Supply chain had no executive visibility layer, and the operations team ran entirely on tribal knowledge.</p>
+                </div>
+            </div>
+            <div style="order: 1;" class="reveal-left delay-200">
+                <div class="metrics-bento">
+                    <div class="metric-cell">
+                        <div class="metric-value" style="font-size: 2.2rem;">3 Wks</div>
+                        <div class="metric-label">Full migration</div>
                     </div>
-                    
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
-                        <div class="metrics-bento">
-                            <div class="metric-cell">
-                                <div class="metric-value">90<span>%</span></div>
-                                <div class="metric-label">Errors reduced</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 90%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">25<span>%</span></div>
-                                <div class="metric-label">Speed improved</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 25%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">50<span>%</span></div>
-                                <div class="metric-label">Work automated</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 50%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">100<span>%</span></div>
-                                <div class="metric-label">Exec visibility</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
-                            </div>
-                        </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">100<span>%</span></div>
+                        <div class="metric-label">Ops in Asana</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="100%"></div></div>
+                    </div>
+                    <div class="metric-cell" style="background: var(--brand-navy);">
+                        <div class="metric-value" style="color: white; font-size: 2rem;">Live <i data-lucide="radio" style="color: var(--brand-orange); width: 24px; margin-left: 8px;"></i></div>
+                        <div class="metric-label" style="color: var(--text-tertiary);">Inventory Dashboards</div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-value" style="font-size: 2rem;">Unified</div>
+                        <div class="metric-label">Centralized execution</div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 6: CASE STUDY - ROOSTY'S -->
-        <section class="slide" id="slide-6">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
-                    <div class="dot"></div>
-                    <span class="page-num">06</span>
-                    <span>Business Case 02</span>
-                </div>
+    <!-- CASE STUDY 3: PRIDOLA -->
+    <section class="section section-alt">
+        <div class="container grid-1-2">
+            <div class="reveal-left delay-100">
+                <div class="badge"><i data-lucide="shopping-cart"></i> E-Commerce • Shopify Plus</div>
+                <h2 class="section-title" style="font-size: 3rem;">Pridola</h2>
+                <p class="section-subtitle">An e-commerce brand that permanently eliminated weekly status meetings by replacing them with a live Asana operational dashboard.</p>
                 
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="activity"></i> Chicken Supplements • $10M+ Revenue</div>
-                        <h2 class="slide-title">Roosty's</h2>
-                        <p class="slide-subtitle">A $10M+ chicken supplement brand scaling supply chain operations and consolidating its entire tech stack into a single Asana OS.</p>
-                        
-                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
-                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Challenge</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Supply chain had no executive visibility layer, and the operations team ran entirely on tribal knowledge.</p>
-                        </div>
+                <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
+                    <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
+                    <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Built a custom Asana ops dashboard with automated task-level reporting. Every team member received a defined swim lane, and every manager received a live portfolio view.</p>
+                </div>
+            </div>
+            <div class="reveal-right delay-200">
+                <div class="metrics-bento">
+                    <div class="metric-cell" style="background: var(--brand-orange-light);">
+                        <div class="metric-value" style="color: var(--brand-orange);">0</div>
+                        <div class="metric-label" style="color: var(--text-main);">Status meetings / wk</div>
                     </div>
-                    
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
-                        <div class="metrics-bento">
-                            <div class="metric-cell">
-                                <div class="metric-value" style="font-size: 2rem;">3 Wks</div>
-                                <div class="metric-label">Full platform migration</div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">100<span>%</span></div>
-                                <div class="metric-label">Ops in Asana</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
-                            </div>
-                            <div class="metric-cell" style="background: var(--brand-navy);">
-                                <div class="metric-value" style="color: white; font-size: 2rem;">Live <i data-lucide="radio" style="color: var(--brand-orange); width: 24px; margin-left: 8px;"></i></div>
-                                <div class="metric-label" style="color: var(--text-tertiary);">Inventory Dashboards</div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value" style="font-size: 2rem;">Unified</div>
-                                <div class="metric-label">Centralized execution</div>
-                            </div>
-                        </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">6<span>+ hr</span></div>
+                        <div class="metric-label">Exec time saved</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="80%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">42<span>%</span></div>
+                        <div class="metric-label">Delivery improvement</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="42%"></div></div>
+                    </div>
+                    <div class="metric-cell">
+                        <div class="metric-value">100<span>%</span></div>
+                        <div class="metric-label">Updates automated</div>
+                        <div class="bar-chart"><div class="bar-fill" data-target="100%"></div></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 7: CASE STUDY - PRIDOLA -->
-        <section class="slide" id="slide-7">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
-                    <div class="dot"></div>
-                    <span class="page-num">07</span>
-                    <span>Business Case 03</span>
+    <!-- SECTION 11: CTA -->
+    <section class="section section-alt" id="audit-form" style="border-bottom: none; text-align: center;">
+        <div class="container">
+            <div class="kicker reveal" style="margin: 0 auto 1.5rem;">
+                <div class="dot"></div>
+                <span>Get Started</span>
+            </div>
+            
+            <h2 class="section-title reveal delay-100">Request an Executive <span>Audit.</span></h2>
+            <p class="section-subtitle reveal delay-200" style="margin: 0 auto 2.5rem;">Ready to eliminate operational chaos? Schedule a deep dive into your operations. We'll identify bottlenecks, map out a scalable architecture, and show you exactly how we can build systems that execute your vision.</p>
+            
+            <div class="metrics-bento step-grid reveal delay-300" style="text-align: left; max-width: 900px; margin: 0 auto 3rem; background: transparent; border: none; box-shadow: none;">
+                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
+                    <i data-lucide="search" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">1. Operations Audit</h4>
                 </div>
-                
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="shopping-cart"></i> E-Commerce • Shopify Plus</div>
-                        <h2 class="slide-title">Pridola</h2>
-                        <p class="slide-subtitle">An e-commerce brand that permanently eliminated weekly status meetings by replacing them with a live Asana operational dashboard.</p>
-                        
-                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
-                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Built a custom Asana ops dashboard with automated task-level reporting. Every team member received a defined swim lane, and every manager received a live portfolio view.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
-                        <div class="metrics-bento">
-                            <div class="metric-cell" style="background: var(--brand-orange-light);">
-                                <div class="metric-value" style="color: var(--brand-orange);">0</div>
-                                <div class="metric-label" style="color: var(--text-main);">Status meetings / wk</div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">6<span>+ hr</span></div>
-                                <div class="metric-label">Leadership time saved</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 80%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">42<span>%</span></div>
-                                <div class="metric-label">Delivery improvement</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 42%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">100<span>%</span></div>
-                                <div class="metric-label">Updates automated</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 100%;"></div></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
+                    <i data-lucide="pen-tool" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">2. Custom Architecture</h4>
+                </div>
+                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
+                    <i data-lucide="users" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">3. Team Enablement</h4>
+                </div>
+                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
+                    <i data-lucide="refresh-cw" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">4. Scale & Optimize</h4>
                 </div>
             </div>
-        </section>
 
-        <!-- SLIDE 8: CASE STUDY - BLACK & BLACK -->
-        <section class="slide" id="slide-8">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
-                    <div class="dot"></div>
-                    <span class="page-num">08</span>
-                    <span>Business Case 04</span>
-                </div>
-                
-                <div class="grid-1-2">
-                    <div class="reveal-left delay-100">
-                        <div class="badge"><i data-lucide="briefcase"></i> Digital Commerce Agency</div>
-                        <h2 class="slide-title">Black & Black</h2>
-                        <p class="slide-subtitle">A digital commerce agency focused on massively improving their internal delivery efficiency and client project outcomes.</p>
-                        
-                        <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-light); border-left: 3px solid var(--brand-orange);">
-                            <h4 style="color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.5rem;">The Engagement</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Led dedicated project management and deeply optimized workflows using Asana to streamline delivery and coordination for complex Shopify builds.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="reveal-right delay-200">
-                        <h3 class="font-display" style="font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 800; color: var(--brand-ink);">Quantifiable Impact</h3>
-                        <div class="metrics-bento">
-                            <div class="metric-cell">
-                                <div class="metric-value">40<span>%</span></div>
-                                <div class="metric-label">Manual effort reduction</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 40%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value">95<span>%</span></div>
-                                <div class="metric-label">Client satisfaction</div>
-                                <div class="bar-chart"><div class="bar-fill" style="width: 95%;"></div></div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value"><i data-lucide="zap" style="width: 32px; height: 32px; color: var(--brand-orange); margin-right: 8px;"></i> Faster</div>
-                                <div class="metric-label">Delivery timelines</div>
-                            </div>
-                            <div class="metric-cell">
-                                <div class="metric-value"><i data-lucide="check-circle-2" style="width: 32px; height: 32px; color: var(--brand-orange); margin-right: 8px;"></i> Optimal</div>
-                                <div class="metric-label">Project workflows</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="reveal delay-400">
+                <button onclick="openModal(event)" class="btn-primary" style="padding: 18px 36px; font-size: 1.1rem; border: none;">
+                    Request Discovery Call <i data-lucide="arrow-right"></i>
+                </button>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SLIDE 9: DELIVERABLES -->
-        <section class="slide" id="slide-9">
-            <div class="slide-content desktop-v-center">
-                <div class="kicker reveal">
-                    <div class="dot"></div>
-                    <span class="page-num">09</span>
-                    <span>ROI & Deliverables</span>
-                </div>
-                
-                <h2 class="slide-title reveal delay-100">What You Can <span>Expect.</span></h2>
-                <p class="slide-subtitle reveal delay-200">Systems specifically designed to improve execution speed and effortlessly scale with growth.</p>
+    <!-- Footer -->
+    <footer style="background: var(--bg-main); padding: 2rem 1.5rem; text-align: center; border-top: 1px solid var(--border-light);">
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">&copy; 2024 KlarityOps. All rights reserved.</p>
+    </footer>
 
-                <div class="grid-cards grid-cards-5 mt-4">
-                    <div class="bento-card reveal delay-100">
-                        <div class="bento-icon"><i data-lucide="layout-template"></i></div>
-                        <h3>Clear Structure</h3>
-                        <p>A workspace perfectly aligned with your team, goals, and how work actually moves in your business.</p>
-                    </div>
-                    <div class="bento-card reveal delay-200">
-                        <div class="bento-icon"><i data-lucide="user-check"></i></div>
-                        <h3>Defined Ownership</h3>
-                        <p>Every function has a clear owner, deadline, and process—no more chasing updates.</p>
-                    </div>
-                    <div class="bento-card reveal delay-300">
-                        <div class="bento-icon"><i data-lucide="scaling"></i></div>
-                        <h3>Scalable Foundations</h3>
-                        <p>Systems that support robust growth without adding operational complexity or new headcount.</p>
-                    </div>
-                    <div class="bento-card reveal delay-400">
-                        <div class="bento-icon"><i data-lucide="handshake"></i></div>
-                        <h3>Built for Adoption</h3>
-                        <p>Designed intuitively to actually be used by your team—not just documented and forgotten.</p>
-                    </div>
-                    <div class="bento-card reveal delay-500">
-                        <div class="bento-icon"><i data-lucide="pie-chart"></i></div>
-                        <h3>Real-Time Visibility</h3>
-                        <p>Dashboards and reporting so leadership always knows exactly what's on track and at risk.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 10: IMPACT & CONNECT -->
-        <section class="slide" id="slide-10">
-            <div class="slide-content desktop-v-center" style="text-align: center;">
-                <div class="kicker reveal" style="margin: 0 auto 2.5rem;">
-                    <div class="dot"></div>
-                    <span class="page-num">10</span>
-                    <span>Next Steps</span>
+    <!-- MODAL FORM OVERLAY -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal(event)" aria-label="Close Modal">
+                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+            </button>
+            
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--brand-ink); font-weight: 800; font-family: 'Hanken Grotesk';">Let's build what scales.</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Fill out the form below to request your Executive Operations Audit.</p>
+            
+            <form id="submit-to-google-sheet" name="submit-to-google-sheet">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="Name" class="form-input" placeholder="Jane Doe" required>
                 </div>
 
-                <h2 class="slide-title reveal delay-100">Let's build<br>what <span>scales.</span></h2>
-                <p class="slide-subtitle reveal delay-200" style="margin: 0 auto 3rem;">You have the vision. We build the systems that make it real and sustainable. Let's create operational clarity, unlock performance, and scale with confidence.</p>
-                
-                <div class="metrics-bento step-grid reveal delay-300" style="text-align: left; margin-bottom: 3rem; max-width: 900px; margin-left: auto; margin-right: auto;">
-                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 1.5rem 1rem;">
-                        <i data-lucide="search" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
-                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Systems Audit</h4>
-                    </div>
-                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 1.5rem 1rem;">
-                        <i data-lucide="pen-tool" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
-                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Design & Build</h4>
-                    </div>
-                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 1.5rem 1rem;">
-                        <i data-lucide="users" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
-                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Team Training</h4>
-                    </div>
-                    <div class="metric-cell" style="align-items: center; text-align: center; padding: 1.5rem 1rem;">
-                        <i data-lucide="refresh-cw" style="color: var(--brand-orange); margin-bottom: 1rem; width: 32px; height: 32px;"></i>
-                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Optimization</h4>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Work Email</label>
+                    <input type="email" name="Email" class="form-input" placeholder="jane@yourbrand.com" required>
                 </div>
 
-                <div class="reveal delay-400">
-                    <a href="https://klarityops.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 16px 32px; font-size: 1rem;">
-                        Book an Executive Audit <i data-lucide="arrow-right"></i>
-                    </a>
+                <div class="form-group">
+                    <label class="form-label">Company Website</label>
+                    <input type="url" name="Website" class="form-input" placeholder="https://yourbrand.com" required>
                 </div>
-            </div>
-        </section>
 
-    </div>
+                <div class="form-group">
+                    <label class="form-label">Monthly Revenue</label>
+                    <select name="Revenue" class="form-select" required>
+                        <option value="" disabled selected>Select revenue range</option>
+                        <option value="Under $100k">&lt; $100k / month</option>
+                        <option value="$100k - $500k">$100k - $500k / month</option>
+                        <option value="$500k - $1M">$500k - $1M / month</option>
+                        <option value="$1M+">$1M+ / month</option>
+                    </select>
+                </div>
 
-    <!-- Presentation Controls -->
-    <div class="controls">
-        <button id="prevBtn" title="Previous Slide (Up/Left)"><i data-lucide="chevron-up" style="width: 20px;"></i></button>
-        <span class="slide-counter" id="slideCounter">01 / 10</span>
-        <button id="nextBtn" title="Next Slide (Down/Right)"><i data-lucide="chevron-down" style="width: 20px;"></i></button>
+                <div class="form-group">
+                    <label class="form-label">Biggest Operational Bottleneck</label>
+                    <textarea name="Bottleneck" class="form-textarea" placeholder="Tell us briefly what is breaking as you scale..." required></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 16px; margin-top: 0.5rem;">
+                    Submit Request <i data-lucide="send" style="width: 16px;"></i>
+                </button>
+
+                <!-- Status Messages -->
+                <div id="form-success" style="display: none; background: #e6f4ea; color: #1e4620; padding: 12px; border-radius: 4px; margin-top: 1rem; text-align: center; font-weight: 600; font-size: 0.9rem; border: 1px solid #c3e6cb;">
+                    Request sent! We will be in touch shortly.
+                </div>
+                <div id="form-error" style="display: none; background: #fce8e6; color: #a51d2a; padding: 12px; border-radius: 4px; margin-top: 1rem; text-align: center; font-weight: 600; font-size: 0.9rem; border: 1px solid #fad2cf;">
+                    Oops! Something went wrong. Please try again.
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
         // Init Lucide Icons
         lucide.createIcons();
 
-        // Scroll, Animation & Presentation Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('presentationContainer');
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const counter = document.getElementById('slideCounter');
-            const progressBar = document.getElementById('progressBar');
-            
-            const totalSlides = slides.length;
-            let currentSlideIndex = 0;
+        // Modal Logic
+        const modal = document.getElementById('contactModal');
+        const body = document.body;
 
-            // Intersection Observer for Animations
+        function openModal(e) {
+            if(e) e.preventDefault();
+            modal.classList.add('active');
+            body.classList.add('modal-open');
+        }
+
+        function closeModal(e) {
+            if(e) e.preventDefault();
+            modal.classList.remove('active');
+            body.classList.remove('modal-open');
+            // reset form messages on close
+            setTimeout(() => {
+                document.getElementById('form-success').style.display = 'none';
+                document.getElementById('form-error').style.display = 'none';
+                document.forms['submit-to-google-sheet'].reset();
+            }, 300);
+        }
+
+        // Close modal when clicking outside the content box
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Intersection Observer for scroll animations (Desktop only)
+        document.addEventListener('DOMContentLoaded', () => {
             const observerOptions = {
-                root: container,
+                root: null,
                 rootMargin: '0px',
-                threshold: 0.2 // Trigger when 20% of slide is visible
+                threshold: 0.15
             };
 
-            const slideObserver = new IntersectionObserver((entries) => {
+            const sectionObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        // Trigger inner bar-chart animations
                         const bars = entry.target.querySelectorAll('.bar-fill');
                         bars.forEach(bar => {
                             if(bar.dataset.target) {
                                 setTimeout(() => {
                                     bar.style.width = bar.dataset.target;
-                                }, 300); // slight delay after slide activates
+                                }, 200); 
                             }
                         });
                     }
                 });
             }, observerOptions);
 
-            slides.forEach(slide => slideObserver.observe(slide));
+            document.querySelectorAll('.section').forEach(sec => sectionObserver.observe(sec));
+        });
 
-            // Format number with leading zero
-            const formatSlideNum = (num) => num < 10 ? `0${num}` : num;
+        // Webhook / Google Sheets Form Submission Logic
+        const scriptURL = 'YOUR_GOOGLE_SHEET_WEBHOOK_URL_HERE'; // <-- REPLACE THIS WITH YOUR WEBHOOK
+        const form = document.forms['submit-to-google-sheet'];
 
-            // Update UI based on scroll position
-            function updateUI() {
-                const scrollPosition = container.scrollTop;
-                const windowHeight = container.clientHeight;
-                
-                // Calculate current slide based on scroll position
-                currentSlideIndex = Math.round(scrollPosition / windowHeight);
-                
-                // Bounds check
-                if(currentSlideIndex < 0) currentSlideIndex = 0;
-                if(currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
-
-                // Update Counter
-                counter.textContent = `${formatSlideNum(currentSlideIndex + 1)} / ${formatSlideNum(totalSlides)}`;
-                
-                // Update Buttons
-                prevBtn.disabled = currentSlideIndex === 0;
-                nextBtn.disabled = currentSlideIndex === totalSlides - 1;
-
-                // Update Progress Bar
-                const progressPercentage = ((currentSlideIndex + 1) / totalSlides) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-            }
-
-            // Scroll Event Listener
-            container.addEventListener('scroll', () => {
-                window.requestAnimationFrame(updateUI);
-            });
-
-            // Button Click Handlers
-            nextBtn.addEventListener('click', () => {
-                if (currentSlideIndex < totalSlides - 1) {
-                    slides[currentSlideIndex + 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-
-            prevBtn.addEventListener('click', () => {
-                if (currentSlideIndex > 0) {
-                    slides[currentSlideIndex - 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-
-            // Keyboard Navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
-                    e.preventDefault();
-                    if (currentSlideIndex < totalSlides - 1) {
-                        slides[currentSlideIndex + 1].scrollIntoView({ behavior: 'smooth' });
-                    }
-                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    if (currentSlideIndex > 0) {
-                        slides[currentSlideIndex - 1].scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-
-            // Initial UI Update
-            updateUI();
+        form.addEventListener('submit', e => {
+            e.preventDefault();
             
-            // Adjust icons on resize if mobile (horizontal vs vertical scroll mentality)
-            window.addEventListener('resize', () => {
-               if(window.innerWidth < 1024) {
-                   prevBtn.innerHTML = '<i data-lucide="chevron-up" style="width: 20px;"></i>';
-                   nextBtn.innerHTML = '<i data-lucide="chevron-down" style="width: 20px;"></i>';
-               } else {
-                   prevBtn.innerHTML = '<i data-lucide="chevron-left" style="width: 20px;"></i>';
-                   nextBtn.innerHTML = '<i data-lucide="chevron-right" style="width: 20px;"></i>';
-               }
-               lucide.createIcons();
-            });
-            
-            window.dispatchEvent(new Event('resize'));
+            const btn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('form-success');
+            const errorMsg = document.getElementById('form-error');
+
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = 'Sending... <i data-lucide="loader" class="animate-spin" style="width: 16px;"></i>';
+            lucide.createIcons();
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    successMsg.style.display = 'block';
+                    errorMsg.style.display = 'none';
+                    form.reset();
+                    // Close the modal after 3 seconds of success
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    errorMsg.style.display = 'block';
+                    successMsg.style.display = 'none';
+                })
+                .finally(() => {
+                    // Reset button state
+                    btn.disabled = false;
+                    btn.innerHTML = 'Submit Request <i data-lucide="send" style="width: 16px;"></i>';
+                    lucide.createIcons();
+                });
         });
     </script>
 </body>
