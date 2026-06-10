@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KlarityOps | Executive Briefing</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -54,9 +52,12 @@
 
         body.modal-open { overflow: hidden; }
 
+        /* Typography Corrections: No forced capitalization, subtle letter-spacing applied */
         h1, h2, h3, h4, h5, h6, .font-display {
             font-family: 'Hanken Grotesk', sans-serif;
             color: var(--brand-navy);
+            text-transform: none !important;
+            letter-spacing: 0.02em; 
         }
 
         /* Navbar */
@@ -66,7 +67,7 @@
             border-bottom: 1px solid var(--border-light); z-index: 1000;
             padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
         }
-        .logo { font-family: 'Hanken Grotesk', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--brand-ink); text-decoration: none; letter-spacing: -0.02em; }
+        .logo { font-family: 'Hanken Grotesk', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--brand-ink); text-decoration: none; letter-spacing: -0.01em; }
         .logo span { color: var(--brand-orange); }
         .nav-cta { display: none; cursor: pointer; }
 
@@ -104,7 +105,7 @@
 
         .section-title {
             font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; line-height: 1.05;
-            letter-spacing: -0.03em; margin-bottom: 1.25rem; color: var(--brand-ink);
+            letter-spacing: -0.01em; margin-bottom: 1.25rem; color: var(--brand-ink);
         }
         .section-title span { color: var(--brand-orange); }
         .section-subtitle {
@@ -116,9 +117,16 @@
         .grid-1-2 { display: grid; grid-template-columns: 1fr; gap: 3rem; }
         @media (min-width: 1024px) { .grid-1-2 { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; } }
 
+        .grid-1-3-layout { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 5rem; }
+        @media (min-width: 1024px) { .grid-1-3-layout { grid-template-columns: 1fr 2.5fr; gap: 4rem; align-items: start; } }
+
         .grid-cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media (min-width: 768px) { .grid-cards { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .grid-cards-3 { grid-template-columns: repeat(3, 1fr); } .grid-cards-5 { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { 
+            .grid-cards-3 { grid-template-columns: repeat(3, 1fr); } 
+            .grid-cards-4 { grid-template-columns: repeat(2, 1fr); } 
+            .grid-cards-5 { grid-template-columns: repeat(3, 1fr); } 
+        }
 
         /* Bento Cards */
         .bento-card {
@@ -160,12 +168,6 @@
         .step-num { font-family: 'Hanken Grotesk'; font-size: 0.85rem; font-weight: 800; color: var(--brand-orange); margin-bottom: 0.75rem; letter-spacing: 0.1em; }
         .timeline-step h3 { font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 700; color: var(--brand-ink); }
         .timeline-step p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
-
-        /* Architecture Stack */
-        .arch-stack { display: flex; flex-direction: column; gap: 1rem; }
-        .arch-layer { background: var(--bg-surface); border: 1px solid var(--border-light); padding: 1.25rem; border-radius: 8px; display: flex; align-items: center; gap: 1rem; box-shadow: var(--shadow-sm); transition: transform 0.3s ease; }
-        .arch-layer:hover { transform: translateX(5px); border-color: var(--border-dark); }
-        .arch-icon { color: var(--brand-orange); width: 24px; height: 24px; flex-shrink: 0; }
 
         /* Buttons */
         .btn-primary {
@@ -238,28 +240,36 @@
         @media (max-width: 1023px) {
             .reveal, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; }
         }
+    
+        /* Case Study Responsive Layout */
+        .case-content { order: 1; }
+        .case-metrics { order: 2; }
+
+        @media (min-width: 1024px) {
+            .case-content.reverse { order: 2; }
+            .case-metrics.reverse { order: 1; }
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="#" class="logo">Klarity<span>Ops</span>.</a>
         <button onclick="openModal(event)" class="nav-cta">Book Audit <i data-lucide="arrow-right"></i></button>
     </nav>
 
-    <!-- SECTION 1: HERO -->
     <section class="section section-alt hero">
         <div class="container grid-1-2">
             <div class="reveal-left delay-100">
                 <div class="kicker">
                     <div class="dot"></div>
-                    <span>Executive Summary</span>
+                    <span>The Operating System Studio</span>
                 </div>
-                <h1 class="section-title">Scale with <span>systems.</span><br>Not operational chaos.</h1>
-                <p class="section-subtitle">We design operational infrastructure for scaling DTC and eCommerce brands. Replace fragmented execution with structured Asana-powered systems, automation layers, and executive visibility frameworks.</p>
+                <h1 class="section-title">Scale with <span>systems,</span><br>not founder chaos.</h1>
+                <p class="section-subtitle">Asana operating systems for 8 to 10 figure D2C brands.</p>
                 <button onclick="openModal(event)" class="btn-primary">
-                    Initiate Engagement <i data-lucide="arrow-right" style="width: 18px;"></i>
+                    Book Your Systems Audit <i data-lucide="arrow-right" style="width: 18px;"></i>
                 </button>
             </div>
             
@@ -290,150 +300,139 @@
         </div>
     </section>
 
-    <!-- SECTION 2: PHILOSOPHY -->
     <section class="section">
         <div class="container">
             <div class="reveal delay-100">
                 <div class="kicker">
                     <div class="dot"></div>
-                    <span>Core Philosophy</span>
+                    <span>The Problem</span>
                 </div>
-                <h2 class="section-title">Operational clarity <span>at scale.</span></h2>
-                <p class="section-subtitle">We partner with fast-growing brands to eliminate operational chaos, standardize execution, and create scalable systems that leadership teams can actually rely on.</p>
+                <h2 class="section-title">Your business outgrew<br><span>the way it was run.</span></h2>
+                <p class="section-subtitle">This is not a people problem. It is a missing system. The brands we work with are growing fast—but the way work moves through them hasn't changed since the early days.</p>
             </div>
 
             <div class="grid-cards grid-cards-3">
                 <div class="bento-card reveal delay-100">
-                    <div class="bento-icon"><i data-lucide="crosshair"></i></div>
-                    <h3>Focus</h3>
-                    <p>Eliminate chaos and bring focus back to strategies that actually move the needle.</p>
+                    <div class="bento-icon"><i data-lucide="alert-circle"></i></div>
+                    <h3>Tasks slip through the cracks</h3>
+                    <p>Work falls through because nothing is catching it—only people hoping someone else remembered.</p>
                 </div>
                 <div class="bento-card reveal delay-200">
-                    <div class="bento-icon"><i data-lucide="layers"></i></div>
-                    <h3>Structure</h3>
-                    <p>Design scalable systems that strictly align your people, processes, and priorities.</p>
+                    <div class="bento-icon"><i data-lucide="brain"></i></div>
+                    <h3>Half the plan lives in the founder's head</h3>
+                    <p>The roadmap isn't written down anywhere the team can act on. That's not a strategy—it's a bottleneck.</p>
                 </div>
                 <div class="bento-card reveal delay-300">
-                    <div class="bento-icon"><i data-lucide="eye"></i></div>
-                    <h3>Visibility</h3>
-                    <p>Get real-time clarity across projects, team performance, and operational roadblocks.</p>
-                </div>
-                <div class="bento-card reveal delay-400">
-                    <div class="bento-icon"><i data-lucide="trending-up"></i></div>
-                    <h3>Scale</h3>
-                    <p>Build the foundational operational infrastructure to scale without adding complexity.</p>
-                </div>
-                <div class="bento-card reveal delay-500">
-                    <div class="bento-icon"><i data-lucide="link"></i></div>
-                    <h3>Alignment</h3>
-                    <p>Create strict accountability and defined ownership across your entire cross-functional team.</p>
+                    <div class="bento-icon"><i data-lucide="message-circle"></i></div>
+                    <h3>The founder is in every thread</h3>
+                    <p>Nothing moves without you being copied in. That's not leadership—it's a missing operating system.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 3: ARCHITECTURE -->
-    <section class="section section-alt">
-        <div class="container grid-1-2">
-            <div class="reveal-left delay-100">
-                <div class="kicker">
-                    <div class="dot"></div>
-                    <span>Operational Architecture</span>
-                </div>
-                <h2 class="section-title">Architecture<br><span>layers.</span></h2>
-                <p class="section-subtitle">We build for founder autonomy—helping leadership extract themselves from daily operations through structured, reliable workspace architecture.</p>
+    <section class="section section-alt pb-0" style="border-bottom: none;">
+        <div class="container reveal" style="text-align: center;">
+            <div class="kicker" style="margin: 0 auto 2rem auto;">
+                <div class="dot"></div>
+                <span>The Klarity Method</span>
             </div>
-            
-            <div class="arch-stack">
-                <div class="arch-layer reveal-right delay-100">
-                    <i data-lucide="layout-dashboard" class="arch-icon"></i>
-                    <div>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">System Design</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Custom Asana workspaces built around org structure.</p>
-                    </div>
-                </div>
-                <div class="arch-layer reveal-right delay-200">
-                    <i data-lucide="git-merge" class="arch-icon"></i>
-                    <div>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Process Setup</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Workflows and automations that eliminate busywork.</p>
-                    </div>
-                </div>
-                <div class="arch-layer reveal-right delay-300">
-                    <i data-lucide="monitor-play" class="arch-icon"></i>
-                    <div>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Visibility Layer</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Dashboards giving leadership live execution insight.</p>
-                    </div>
-                </div>
-                <div class="arch-layer reveal-right delay-400">
-                    <i data-lucide="maximize" class="arch-icon"></i>
-                    <div>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Scalability</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Systems designed to grow without adding headcount.</p>
-                    </div>
-                </div>
-                <div class="arch-layer reveal-right delay-500">
-                    <i data-lucide="book-open" class="arch-icon"></i>
-                    <div>
-                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--brand-ink); margin-bottom: 2px;">Team Enablement</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary);">SOPs and documentation for independent execution.</p>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title">Three stages.<br><span>One operating system.</span></h2>
+            <p class="section-subtitle" style="margin: 0 auto 3rem auto; text-align: center;">One operating system that runs without you in every thread. We map before we build, build something that runs itself, then make it outlast us.</p>
         </div>
     </section>
 
-    <!-- SECTION 4: METHODOLOGY -->
-    <section class="section">
+    <section class="section pt-0">
         <div class="container">
-            <div class="reveal delay-100">
-                <div class="kicker">
-                    <div class="dot"></div>
-                    <span>Implementation</span>
+            
+            <div class="grid-1-3-layout">
+                <div class="reveal-left">
+                    <h4 style="color: var(--brand-orange); text-transform: uppercase !important; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Stage 01</h4>
+                    <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 1rem;">Clarity.</h2>
+                    <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.6;">We learn how the business actually runs, and where it breaks, before we touch the tool.</p>
                 </div>
-                <h2 class="section-title">Built for <span>execution.</span></h2>
-                <p class="section-subtitle">Our approach is structured for speed, operational adoption, and long-term scalability—from the first discovery call to full team launch.</p>
+                <div class="grid-cards grid-cards-3 reveal-right">
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="git-merge" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Map workflows</h3>
+                        <p style="font-size: 0.9rem;">Map every active workstream before moving into the software.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="search" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Surface ownership</h3>
+                        <p style="font-size: 0.9rem;">Surface exactly where task ownership currently remains unclear.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="alert-triangle" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Pinpoint breaks</h3>
+                        <p style="font-size: 0.9rem;">Pinpoint exactly where communications and escalations break down.</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="timeline reveal delay-200">
-                <div class="timeline-step">
-                    <div class="step-num">PHASE 01</div>
-                    <h3>Discovery</h3>
-                    <p>Deep dive into teams, workflows, goals, and pain points.</p>
+            <div class="grid-1-3-layout">
+                <div class="reveal-left">
+                    <h4 style="color: var(--brand-orange); text-transform: uppercase !important; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Stage 02</h4>
+                    <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 1rem;">Control.</h2>
+                    <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.6;">Once we know how the business runs, we build the system that runs itself.</p>
                 </div>
-                <div class="timeline-step">
-                    <div class="step-num">PHASE 02</div>
-                    <h3>Standardization</h3>
-                    <p>Processes with templates, custom automations, and integrations.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-num">PHASE 03</div>
-                    <h3>Implementation</h3>
-                    <p>Building tailored Asana architecture collaboratively.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-num">PHASE 04</div>
-                    <h3>Team Training</h3>
-                    <p>Interactive, hands-on team enablement sessions.</p>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-num">PHASE 05</div>
-                    <h3>Metrics</h3>
-                    <p>Executive dashboards and automated reporting.</p>
+                <div class="grid-cards grid-cards-4 reveal-right">
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="repeat" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Recurring tasks</h3>
+                        <p style="font-size: 0.9rem;">That remind themselves, strictly on the cadence the work demands.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="workflow" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Automations</h3>
+                        <p style="font-size: 0.9rem;">That instantly turn meetings into tracked, fully owned work.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="bar-chart-3" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Dashboards</h3>
+                        <p style="font-size: 0.9rem;">That update on their own. Absolutely zero status-chasing required.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="calendar-check" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Weekly cadence</h3>
+                        <p style="font-size: 0.9rem;">So the team always clearly knows what matters most, without asking.</p>
+                    </div>
                 </div>
             </div>
+
+            <div class="grid-1-3-layout" style="margin-bottom: 0;">
+                <div class="reveal-left">
+                    <h4 style="color: var(--brand-orange); text-transform: uppercase !important; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Stage 03</h4>
+                    <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 1rem;">Compounding.</h2>
+                    <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.6;">It gets stronger after we leave, guaranteeing the tenth launch runs smoother than the first.</p>
+                </div>
+                <div class="grid-cards grid-cards-3 reveal-right">
+                    <div class="bento-card" style="background: var(--brand-navy); border-color: var(--brand-navy);">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem; background: rgba(255,255,255,0.1); border: none;"><i data-lucide="book-open" style="width: 18px; color: white;"></i></div>
+                        <h3 style="font-size: 1.05rem; color: white;">Operations Playbook</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-tertiary);">Every process is fully documented to ensure the system outlasts us.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="layers" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Phased rollout</h3>
+                        <p style="font-size: 0.9rem;">Implemented in intentional phases, not overwhelmingly all at once.</p>
+                    </div>
+                    <div class="bento-card">
+                        <div class="bento-icon" style="width: 36px; height: 36px; margin-bottom: 1rem;"><i data-lucide="trending-down" style="width: 18px;"></i></div>
+                        <h3 style="font-size: 1.05rem;">Dependency drops</h3>
+                        <p style="font-size: 0.9rem;">Founder dependency explicitly drops by design as the team takes over.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
-
-    <!-- CASE STUDIES SECTION HEADER -->
     <section class="section section-alt pb-0" style="border-bottom: none; padding-bottom: 0;">
         <div class="container text-center reveal delay-100">
             <h2 class="section-title" style="margin-bottom: 0;">Proven <span>Business Cases.</span></h2>
         </div>
     </section>
 
-    <!-- CASE STUDY 1: SOLAWAVE -->
     <section class="section section-alt pt-10" style="border-top: none;">
         <div class="container grid-1-2">
             <div class="reveal-left delay-100">
@@ -473,10 +472,9 @@
         </div>
     </section>
 
-    <!-- CASE STUDY 2: ROOSTY'S -->
     <section class="section">
         <div class="container grid-1-2">
-            <div style="order: 2;" class="reveal-right delay-100">
+            <div class="case-content reverse reveal-right delay-100">
                 <div class="badge"><i data-lucide="activity"></i> Supplements • $10M+ Revenue</div>
                 <h2 class="section-title" style="font-size: 3rem;">Roosty's</h2>
                 <p class="section-subtitle">A $10M+ chicken supplement brand scaling supply chain operations and consolidating its entire tech stack into a single Asana OS.</p>
@@ -486,7 +484,7 @@
                     <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Tasks lived across ClickUp, Notion, email, and Slack. Supply chain had no executive visibility layer, and the operations team ran entirely on tribal knowledge.</p>
                 </div>
             </div>
-            <div style="order: 1;" class="reveal-left delay-200">
+            <div class="case-metrics reverse reveal-left delay-200">
                 <div class="metrics-bento">
                     <div class="metric-cell">
                         <div class="metric-value" style="font-size: 2.2rem;">3 Wks</div>
@@ -510,7 +508,6 @@
         </div>
     </section>
 
-    <!-- CASE STUDY 3: PRIDOLA -->
     <section class="section section-alt">
         <div class="container grid-1-2">
             <div class="reveal-left delay-100">
@@ -549,10 +546,9 @@
         </div>
     </section>
 
-    <!-- CASE STUDY 4: BLACK & BLACK -->
     <section class="section">
         <div class="container grid-1-2">
-            <div style="order: 2;" class="reveal-right delay-100">
+            <div class="case-content reverse reveal-right delay-100">
                 <div class="badge"><i data-lucide="briefcase"></i> Digital Commerce Agency</div>
                 <h2 class="section-title" style="font-size: 3rem;">Black & Black</h2>
                 <p class="section-subtitle">A digital commerce agency focused on massively improving their internal delivery efficiency and client project outcomes.</p>
@@ -562,7 +558,7 @@
                     <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.5;">Led dedicated project management and deeply optimized workflows using Asana to streamline delivery and coordination for complex Shopify builds.</p>
                 </div>
             </div>
-            <div style="order: 1;" class="reveal-left delay-200">
+            <div class="case-metrics reverse reveal-left delay-200">
                 <div class="metrics-bento">
                     <div class="metric-cell">
                         <div class="metric-value">40<span>%</span></div>
@@ -587,105 +583,202 @@
         </div>
     </section>
 
-    <!-- SECTION 9: DELIVERABLES -->
     <section class="section section-alt">
         <div class="container">
             <div class="reveal delay-100">
                 <div class="kicker">
                     <div class="dot"></div>
-                    <span>ROI & Deliverables</span>
+                    <span>The Roadmap</span>
                 </div>
-                <h2 class="section-title">What You Can <span>Expect.</span></h2>
-                <p class="section-subtitle">Systems specifically designed to improve execution speed and effortlessly scale with growth.</p>
+                <h2 class="section-title">We mapped the <span>40 systems</span> a brand needs across its entire life.</h2>
+                <p class="section-subtitle">From day one to market leader, every brand needs the same backbone of systems. We know which ones come next—so you build in the right order, at the right time.</p>
             </div>
 
-            <div class="grid-cards grid-cards-5 mt-4">
+            <div class="grid-cards grid-cards-4">
                 <div class="bento-card reveal delay-100">
-                    <div class="bento-icon"><i data-lucide="layout-template"></i></div>
-                    <h3>Clear Structure</h3>
-                    <p>A workspace perfectly aligned with your team, goals, and how work actually moves in your business.</p>
+                    <div class="step-num" style="margin-bottom: 0.25rem;">PHASE 01</div>
+                    <h3>Pre-Launch</h3>
+                    <p style="margin-bottom: 1rem; font-weight: 600; color: var(--brand-ink);">Day-one foundations</p>
+                    <p style="line-height: 1.9;">Priority Queue<br>SOP Catalogue<br>GTM Template<br>Team Onboarding</p>
                 </div>
                 <div class="bento-card reveal delay-200">
-                    <div class="bento-icon"><i data-lucide="user-check"></i></div>
-                    <h3>Defined Ownership</h3>
-                    <p>Every function has a clear owner, deadline, and process—no more chasing updates.</p>
+                    <div class="step-num" style="margin-bottom: 0.25rem;">PHASE 02</div>
+                    <h3>Launch</h3>
+                    <p style="margin-bottom: 1rem; font-weight: 600; color: var(--brand-ink);">First 6 months</p>
+                    <p style="line-height: 1.9;">Marketing Calendar<br>PO Tracker<br>Demand Forecasting</p>
                 </div>
                 <div class="bento-card reveal delay-300">
-                    <div class="bento-icon"><i data-lucide="scaling"></i></div>
-                    <h3>Scalable Foundations</h3>
-                    <p>Systems that support robust growth without adding operational complexity or new headcount.</p>
+                    <div class="step-num" style="margin-bottom: 0.25rem;">PHASE 03</div>
+                    <h3>Scaling</h3>
+                    <p style="margin-bottom: 1rem; font-weight: 600; color: var(--brand-ink);">6 to 18 months · team past 15</p>
+                    <p style="line-height: 1.9;">Retailer Onboarding<br>Hiring Pipeline<br>Marketplace Ops</p>
                 </div>
-                <div class="bento-card reveal delay-400">
-                    <div class="bento-icon"><i data-lucide="handshake"></i></div>
-                    <h3>Built for Adoption</h3>
-                    <p>Designed intuitively to actually be used by your team—not just documented and forgotten.</p>
-                </div>
-                <div class="bento-card reveal delay-500">
-                    <div class="bento-icon"><i data-lucide="pie-chart"></i></div>
-                    <h3>Real-Time Visibility</h3>
-                    <p>Dashboards and reporting so leadership always knows exactly what's on track and at risk.</p>
+                <div class="bento-card reveal delay-400" style="background: var(--brand-navy); border-color: var(--brand-navy);">
+                    <div class="step-num" style="margin-bottom: 0.25rem;">PHASE 04</div>
+                    <h3 style="color: #fff;">Maturity</h3>
+                    <p style="margin-bottom: 1rem; font-weight: 600; color: var(--brand-orange);">18 months and beyond</p>
+                    <p style="line-height: 1.9; color: var(--text-tertiary);">Market Expansion<br>Investor Reporting<br>Cost Savings</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 10: CTA -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="reveal delay-100">
+                <div class="kicker">
+                    <div class="dot"></div>
+                    <span>Adoption · By Maturity</span>
+                </div>
+                <h2 class="section-title">A great system nobody <span>uses is worthless.</span></h2>
+                <p class="section-subtitle">Most consultants build the system and leave. We train every person at the right level—four tiers of fluency, each building on the last, until the team owns the system and ownership becomes clear.</p>
+            </div>
+
+            <div class="grid-cards grid-cards-5 mt-4">
+                <div class="bento-card reveal delay-100">
+                    <div class="bento-icon"><i data-lucide="user"></i></div>
+                    <h3>Beginner</h3>
+                    <p>Daily confidence. Find tasks, update status, comment, and know where things live.</p>
+                </div>
+                <div class="bento-card reveal delay-200">
+                    <div class="bento-icon"><i data-lucide="sliders"></i></div>
+                    <h3>Intermediate</h3>
+                    <p>Fluent operator. Custom fields, filters, views, dependencies, and following SOPs correctly.</p>
+                </div>
+                <div class="bento-card reveal delay-300">
+                    <div class="bento-icon"><i data-lucide="layout-dashboard"></i></div>
+                    <h3>Advanced</h3>
+                    <p>System builder. Build and maintain projects, run dashboards and reporting for their area.</p>
+                </div>
+                <div class="bento-card reveal delay-400">
+                    <div class="bento-icon"><i data-lucide="zap"></i></div>
+                    <h3>Power User</h3>
+                    <p>Internal champion. Automations, templates, troubleshooting, and training others.</p>
+                </div>
+                <div class="bento-card reveal delay-500">
+                    <div class="bento-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Admin / Champion</h3>
+                    <p>Governance, template management, keeping the system clean as it scales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="reveal delay-100">
+                <div class="kicker">
+                    <div class="dot"></div>
+                    <span>Adoption · By Role</span>
+                </div>
+                <h2 class="section-title">Everyone trained for <span>the seat they sit in.</span></h2>
+                <p class="section-subtitle">Training isn't one-size-fits-all. Each person learns exactly what their role demands—no more, no less.</p>
+            </div>
+
+            <div class="grid-cards grid-cards-3">
+                <div class="bento-card reveal delay-100">
+                    <div class="bento-icon"><i data-lucide="user"></i></div>
+                    <h3>End User</h3>
+                    <p>How to do daily work cleanly inside the system—find tasks, update status, and keep things moving.</p>
+                </div>
+                <div class="bento-card reveal delay-200">
+                    <div class="bento-icon"><i data-lucide="users"></i></div>
+                    <h3>Team Lead</h3>
+                    <p>Dashboards, capacity and triage, running the weekly cadence, and holding the priority queue.</p>
+                </div>
+                <div class="bento-card reveal delay-300">
+                    <div class="bento-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Admin / Champion</h3>
+                    <p>Governance, automations, template management—keeping the system clean as it scales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-alt">
+        <div class="container">
+            <div class="reveal delay-100">
+                <div class="kicker">
+                    <div class="dot"></div>
+                    <span>Closing the Loop</span>
+                </div>
+                <h2 class="section-title">Training maps onto <span>the method.</span></h2>
+                <p class="section-subtitle">Each stage of the build has a matching stage of adoption—so by the time we leave, the system runs on its own.</p>
+            </div>
+
+            <div class="timeline reveal delay-200">
+                <div class="timeline-step">
+                    <div class="step-num">01 · CLARITY</div>
+                    <h3>Everyone sees the system</h3>
+                    <p>Everyone understands the system and their place in it.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">02 · CONTROL</div>
+                    <h3>Everyone operates it</h3>
+                    <p>Each person is trained to operate their part of it.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-num">03 · COMPOUNDING</div>
+                    <h3>Champions sustain it</h3>
+                    <p>Champions maintain and teach, so it survives without us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section" id="audit-form" style="text-align: center;">
         <div class="container">
             <div class="kicker reveal" style="margin: 0 auto 1.5rem;">
                 <div class="dot"></div>
-                <span>Next Steps</span>
+                <span>The Free Offer</span>
             </div>
             
-            <h2 class="section-title reveal delay-100">Request an Executive <span>Audit.</span></h2>
-            <p class="section-subtitle reveal delay-200" style="margin: 0 auto 2.5rem;">Ready to eliminate operational chaos? Schedule a deep dive into your operations. We'll identify bottlenecks, map out a scalable architecture, and show you exactly how we can build systems that execute your vision.</p>
+            <h2 class="section-title reveal delay-100">Book Your <span>Systems Audit.</span></h2>
+            <p class="section-subtitle reveal delay-200" style="margin: 0 auto 2.5rem;">100% free. No pressure to buy. Leave with a customized workflow roadmap.</p>
             
             <div class="metrics-bento step-grid reveal delay-300" style="text-align: left; max-width: 900px; margin: 0 auto 3rem; background: transparent; border: none; box-shadow: none;">
                 <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
-                    <i data-lucide="search" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">1. Operations Audit</h4>
+                    <i data-lucide="map" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">01 · Clarity</h4>
                 </div>
                 <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
-                    <i data-lucide="pen-tool" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">2. Custom Architecture</h4>
+                    <i data-lucide="settings" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">02 · Control</h4>
+                </div>
+                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
+                    <i data-lucide="trending-up" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">03 · Compounding</h4>
                 </div>
                 <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
                     <i data-lucide="users" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">3. Team Enablement</h4>
-                </div>
-                <div class="metric-cell" style="padding: 1rem; background: transparent; align-items: center; text-align: center;">
-                    <i data-lucide="refresh-cw" style="color: var(--brand-orange); margin-bottom: 0.5rem; width: 24px; height: 24px;"></i>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">4. Scale & Optimize</h4>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--brand-ink);">Team Adoption</h4>
                 </div>
             </div>
 
             <div class="reveal delay-400">
                 <button onclick="openModal(event)" class="btn-primary" style="padding: 18px 36px; font-size: 1.1rem; border: none;">
-                    Request Discovery Call <i data-lucide="arrow-right"></i>
+                    Book Your Systems Audit <i data-lucide="arrow-right"></i>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer style="background: var(--bg-main); padding: 2rem 1.5rem; text-align: center; border-top: 1px solid var(--border-light);">
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">&copy; 2024 KlarityOps. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">© 2026 Huzaifa Farooq. All Rights Reserved.</p>
     </footer>
 
-    <!-- MODAL FORM OVERLAY -->
     <div class="modal-overlay" id="contactModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal(event)" aria-label="Close Modal">
                 <i data-lucide="x" style="width: 20px; height: 20px;"></i>
             </button>
             
-            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--brand-ink); font-weight: 800; font-family: 'Hanken Grotesk';">Let's build what scales.</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Fill out the form below to request your Executive Operations Audit.</p>
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--brand-ink); font-weight: 800; font-family: 'Hanken Grotesk';">Book Your Systems Audit.</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">100% free. No pressure to buy. Leave with a customized workflow roadmap.</p>
             
             <form id="submit-to-google-sheet" name="submit-to-google-sheet">
                 <div class="form-group">
                     <label class="form-label">Full Name</label>
-                    <!-- LOWERCASE name attributes match standard scripts -->
                     <input type="text" name="name" class="form-input" placeholder="Jane Doe" required>
                 </div>
 
@@ -719,7 +812,6 @@
                     Submit Request <i data-lucide="send" style="width: 16px;"></i>
                 </button>
 
-                <!-- Status Messages -->
                 <div id="form-success" style="display: none; background: #e6f4ea; color: #1e4620; padding: 12px; border-radius: 4px; margin-top: 1rem; text-align: center; font-weight: 600; font-size: 0.9rem; border: 1px solid #c3e6cb;">
                     Request sent! We will be in touch shortly.
                 </div>
@@ -808,13 +900,10 @@
             const successMsg = document.getElementById('form-success');
             const errorMsg = document.getElementById('form-error');
 
-            // Loading state
             btn.disabled = true;
             btn.innerHTML = 'Sending... <i data-lucide="loader" class="animate-spin" style="width: 16px;"></i>';
             lucide.createIcons();
 
-            // STANDARD FETCH METHOD: Send FormData directly without 'no-cors' mode 
-            // so the payload is not stripped out by the browser.
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: new FormData(form)
@@ -823,7 +912,6 @@
                     successMsg.style.display = 'block';
                     errorMsg.style.display = 'none';
                     form.reset();
-                    // Close the modal after 3 seconds of success
                     setTimeout(() => {
                         closeModal();
                     }, 3000);
@@ -834,7 +922,6 @@
                     successMsg.style.display = 'none';
                 })
                 .finally(() => {
-                    // Reset button state
                     btn.disabled = false;
                     btn.innerHTML = 'Submit Request <i data-lucide="send" style="width: 16px;"></i>';
                     lucide.createIcons();
