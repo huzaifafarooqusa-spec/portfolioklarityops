@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,7 +292,7 @@
         /* Case-study grid: keep both columns top-aligned so metrics don't float */
         .case-study-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
         @media (min-width: 1024px) {
-            .case-study-grid { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+            .case-study-grid { grid-template-columns: 1.05fr 1fr; gap: 4rem; align-items: center; }
             .case-study-grid .metrics-bento { position: sticky; top: 6rem; }
         }
         @media (max-width: 900px) {
@@ -302,6 +303,41 @@
             .brand-logo { height: 26px; max-width: 110px; }
         }
 
+        /* ── Slide-deck layout ── */
+        html { scroll-snap-type: y proximity; }
+        body { counter-reset: slide; }
+        body > section {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            counter-increment: slide;
+            padding-top: 6.5rem; padding-bottom: 5.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        body > section > .container { width: 100%; }
+        /* deck chrome */
+        body > section::before {
+            content: "Klarity Ops \00b7 Executive Briefing";
+            position: absolute; bottom: 1.4rem; left: 1.75rem;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--text-secondary); opacity: 0.55;
+            pointer-events: none;
+        }
+        body > section::after {
+            content: counter(slide, decimal-leading-zero) " / 11";
+            position: absolute; bottom: 1.4rem; right: 1.75rem;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em;
+            color: var(--brand-orange);
+            pointer-events: none;
+        }
+        @media (max-width: 640px) {
+            html { scroll-snap-type: none; }
+            body > section { min-height: 0; padding-top: 5rem; padding-bottom: 4.5rem; }
+            body > section::before { display: none; }
+        }
+        /* sticky metrics unnecessary in centered slides */
+        .case-study-grid .metrics-bento { position: static; }
     </style>
 </head>
 <body>
@@ -355,11 +391,7 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- BRAND STRIP -->
-    <section style="background: var(--bg-main); padding: 2rem 1.5rem; border-bottom: 1px solid var(--border-light);">
-        <div class="container" style="text-align: center;">
+        <div class="container" style="text-align: center; margin-top: 4rem;">
             <p style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.25rem; opacity: 0.7;">Trusted by founders of</p>
             <div class="brand-logos">
                 <img class="brand-logo" src="data:image/png;base64,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" alt="CC Oatmeal" loading="lazy">
@@ -416,10 +448,7 @@
             <h2 class="section-title">Three stages.<br><span>One operating system.</span></h2>
             <p class="section-subtitle" style="margin: 0 auto 3rem auto; text-align: center;">One operating system that runs without you in every thread. We map before we build, build something that runs itself, then make it outlast us.</p>
         </div>
-    </section>
-
-    <section class="section pt-0">
-        <div class="container">
+        <div class="container" style="margin-top: 3rem;">
             
             <div class="grid-1-3-layout">
                 <div class="reveal-left">
@@ -507,10 +536,7 @@
         <div class="container text-center reveal delay-100">
             <h2 class="section-title" style="margin-bottom: 0;">Recent <span>work.</span></h2>
         </div>
-    </section>
-
-    <section class="section section-alt pt-10" style="border-top: none;">
-        <div class="container case-study-grid">
+        <div class="container case-study-grid" style="margin-top: 3.5rem;">
             <div class="reveal-left delay-100">
                 <div class="badge"><i data-lucide="shopping-bag"></i> DTC Skincare</div>
                 <p class="cs-eyebrow">Asana Case Study</p>
@@ -532,7 +558,6 @@
                         <li>Process errors all but eliminated</li>
                     </ul>
                 </div>
-                <p class="cs-quote">"Before KlarityOps, every team ran on its own logic and I genuinely had no idea what was happening day to day. Now I open one dashboard and the whole company is right there. Honestly feels like we finally grew up as an operation."</p>
             </div>
             <div class="reveal-right delay-200">
                 <div class="metrics-bento">
@@ -557,6 +582,7 @@
                         <div class="bar-chart"><div class="bar-fill" data-target="100%"></div></div>
                     </div>
                 </div>
+                <p class="cs-quote" style="margin-top:1.25rem;">"Before KlarityOps, every team ran on its own logic and I genuinely had no idea what was happening day to day. Now I open one dashboard and the whole company is right there. Honestly feels like we finally grew up as an operation."</p>
             </div>
         </div>
     </section>
@@ -584,7 +610,6 @@
                         <li>100% of operations now run in Asana</li>
                     </ul>
                 </div>
-                <p class="cs-quote">"We had everything scattered across four tools and about a hundred Slack threads. KlarityOps pulled all of it into one place in three weeks. I didn't think we could move that fast without breaking the whole operation."</p>
             </div>
             <div class="case-metrics reverse reveal-left delay-200">
                 <div class="metrics-bento">
@@ -606,6 +631,7 @@
                         <div class="metric-label">Centralized execution</div>
                     </div>
                 </div>
+                <p class="cs-quote" style="margin-top:1.25rem;">"We had everything scattered across four tools and about a hundred Slack threads. KlarityOps pulled all of it into one place in three weeks. I didn't think we could move that fast without breaking the whole operation."</p>
             </div>
         </div>
     </section>
@@ -633,7 +659,6 @@
                         <li>6+ executive hours saved every week</li>
                     </ul>
                 </div>
-                <p class="cs-quote">"We deleted our weekly status meeting and never looked back. Everything I used to chase people for just... shows up on the dashboard now. Getting that time back genuinely changed how I run the business."</p>
             </div>
             <div class="reveal-right delay-200">
                 <div class="metrics-bento">
@@ -657,6 +682,7 @@
                         <div class="bar-chart"><div class="bar-fill" data-target="100%"></div></div>
                     </div>
                 </div>
+                <p class="cs-quote" style="margin-top:1.25rem;">"We deleted our weekly status meeting and never looked back. Everything I used to chase people for just... shows up on the dashboard now. Getting that time back genuinely changed how I run the business."</p>
             </div>
         </div>
     </section>
@@ -684,7 +710,6 @@
                         <li>95% client satisfaction</li>
                     </ul>
                 </div>
-                <p class="cs-quote">"Our delivery used to be held together with willpower and late nights. KlarityOps gave us a system the whole team actually uses, and our clients can feel the difference. We ship cleaner and faster now, without the chaos."</p>
             </div>
             <div class="case-metrics reverse reveal-left delay-200">
                 <div class="metrics-bento">
@@ -707,6 +732,7 @@
                         <div class="metric-label">Project workflows</div>
                     </div>
                 </div>
+                <p class="cs-quote" style="margin-top:1.25rem;">"Our delivery used to be held together with willpower and late nights. KlarityOps gave us a system the whole team actually uses, and our clients can feel the difference. We ship cleaner and faster now, without the chaos."</p>
             </div>
         </div>
     </section>
